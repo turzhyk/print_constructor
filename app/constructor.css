@@ -38,6 +38,10 @@ html, body {
 img.iconThemed {
   filter: var(--icon-filter);
 }
+footer{
+  height: 50rem;
+  background-color: #c6c6c6;
+}
 .header {
   height: 4rem;
   width: 100%;
