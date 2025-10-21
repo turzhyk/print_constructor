@@ -52,6 +52,12 @@ const BuilderCanvas = ({
     realWidth: number;
   }>();
 
+  // State to track current scale and dimensions
+  const [stageSize, setStageSize] = useState({
+    width: 21,
+    height: 9,
+  });
+
   const handleExport = () => {
     if (stageRef.current != null) {
       const uri = stageRef.current.toDataURL();
@@ -198,10 +204,15 @@ const BuilderCanvas = ({
       </div>
     );
   };
-
+  useEffect(() => {
+    setStageSize({
+      width: document.getElementById("builder-canvas")?.clientWidth!,
+      height: document.getElementById("builder-canvas")?.clientHeight!,
+    });
+  }, []);
   useEffect(() => {}, [activeImageProps]);
   return (
-    <>
+    <div id="canvas-holder" className="canvas-holder shadow1">
       <div className="stage-buttons">
         <span className="cup-type-panel">
           <span>Podstawowy kubek:</span>
@@ -227,60 +238,62 @@ const BuilderCanvas = ({
         </button>
       </div>
 
-      {/* <Stage
-        // width={canvasSize.x}
-        // height={canvasSize.y}
-        width={document.getElementById("canvas-holder")?.clientWidth}
-        height={document.getElementById("canvas-holder")?.clientHeight}
-        ref={stageRef}
-        className="builder-canvas "
-        id="builder-canvas"
-      >
-        <Layer>
-          <Rect
-            width={canvasSize.x}
-            height={canvasSize.y}
-            fill={"white"}
-            onClick={() => setActiveImage("")}
-          ></Rect>
+      <div className="builder-canvas" id="builder-canvas">
+        <Stage
+          width={stageSize.width}
+          height={stageSize.height}
+          // width={21}
+          // height={0}
+          ref={stageRef}
+          // className="builder-canvas "
+          // id="builder-canvas"
+        >
+          <Layer>
+            <Rect
+              width={10000}
+              height={10000}
+              fill={"white"}
+              onClick={() => setActiveImage("")}
+            ></Rect>
 
-          {images.map((f, i) => {
-            if (f.type === "image")
-              return (
-                <CanvasImage
-                  key={f.id}
-                  id={f.id}
-                  file={f.file}
-                  type={f.type}
-                  setActiveImage={setActiveImage}
-                  isActive={activeImageId === f.id}
-                  setActiveImageProps={setActiveImageProps}
-                />
-              );
-            else
-              return (
-                <CanvasText
-                  key={f.id}
-                  id={f.id}
-                  setActiveImage={setActiveImage}
-                  isActive={activeImageId === f.id}
-                  text={editText}
-                  size={editTextSize}
-                  align="center"
-                  style={getStyleString()}
-                  setActiveImageProps={setActiveImageProps}
-                  color={editTextColor}
-                ></CanvasText>
-              );
-          })}
-          <Transformer></Transformer>
-        </Layer>
-      </Stage> */}
+            {images.map((f, i) => {
+              if (f.type === "image")
+                return (
+                  <CanvasImage
+                    key={f.id}
+                    id={f.id}
+                    file={f.file}
+                    type={f.type}
+                    setActiveImage={setActiveImage}
+                    isActive={activeImageId === f.id}
+                    setActiveImageProps={setActiveImageProps}
+                  />
+                );
+              else
+                return (
+                  <CanvasText
+                    key={f.id}
+                    id={f.id}
+                    setActiveImage={setActiveImage}
+                    isActive={activeImageId === f.id}
+                    text={editText}
+                    size={editTextSize}
+                    align="center"
+                    style={getStyleString()}
+                    setActiveImageProps={setActiveImageProps}
+                    color={editTextColor}
+                  ></CanvasText>
+                );
+            })}
+            <Transformer></Transformer>
+          </Layer>
+        </Stage>
+      </div>
 
       {getSizeTooltip(activeImageId !== "")}
       {getToolsTooltip(activeImageId !== "")}
       {getTextTooltip(activeImageId !== "")}
-    </>
+    </div>
   );
 };
 
@@ -352,7 +365,7 @@ function CanvasImage({
     sendProps();
   };
   const fitCanvas = (w: number, h: number) => {
-    const ratio = h / canvasSize.y;
+    const ratio = h / document.getElementById("builder-canvas")?.clientHeight!;
     if (ratio > 1) {
       const newHeight = 1 / (ratio * 1.3);
       const newWidth = 1 / (ratio * 1.3);

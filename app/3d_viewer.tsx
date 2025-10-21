@@ -7,7 +7,7 @@ import { Canvas } from "@react-three/fiber";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { TextureLoader } from "three";
 import { createRoot } from "react-dom/client";
-import { Environment } from "@react-three/drei";
+
 
 
 type BoxProps = ThreeElements["mesh"] & {
@@ -20,7 +20,7 @@ viewerCamera.lookAt(0, -1, 0);
 
 
 const ModelViewer = ({ canvasUrl }: { canvasUrl: string }) => {
-  if (canvasUrl === "") return null;
+  // if (canvasUrl === "") return null;
   return (
     <Canvas camera={viewerCamera}>
       <ambientLight intensity={Math.PI / 10} />

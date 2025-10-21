@@ -25,7 +25,7 @@ export default function Home1() {
 
   const { t } = useTranslation();
   const [images, setImages] = useState<ImageItem[]>([
-    { id: "Math.random().toString(36)", type: "text", name: "" },
+    { id: "Math.random().toString(36)", type: "text", name: "Sample text" },
   ]);
 
   const [activeImageId, setActiveImageId] = useState<string>("");
@@ -104,7 +104,7 @@ export default function Home1() {
     return images.toReversed().map((img, index) => (
       <div key={index} className="hierarchy-element">
         <img
-          src={img.file && URL.createObjectURL(img.file)}
+          src={img.type === "text"? "svg/text.svg":img.file && URL.createObjectURL(img.file) }
           draggable={false}
         ></img>
         {img.name}
@@ -142,14 +142,13 @@ export default function Home1() {
     if (id === activeImageId) setActiveImageId("");
   };
   const toggleTheme = () => {
-    (theme === "dark" ? "light" : "dark");
+    setTheme(theme === "dark" ? "light" : "dark");
   };
   const toggleLang = () => setLang(lang === "pl" ? "en" : "pl");
   useEffect(() => {
     const val = window.localStorage.getItem("theme");
     if (val === "dark" || val === "light") setTheme(val);
     else return setTheme("light");
-    
   }, []);
   useEffect(() => {}, [images, canvasUrl]);
   useEffect(() => {
@@ -213,7 +212,7 @@ export default function Home1() {
             <div className="panel-buttons">
               <button className="panel-btn ">
                 <img src="layer.png" className="button-icon" />
-                <span className="panel-buttons-tooltip">Layers</span>
+                <span className="panel-buttons-tooltip">{t("layers")}</span>
               </button>
               <button className="panel-btn nn">
                 <img src="font.png" className="button-icon" />
@@ -229,14 +228,14 @@ export default function Home1() {
               </button>
             </div>
             <div className="panel-layers">
-              <div className="panel-title">Layers</div>
+              <div className="panel-title">{t("layers")}</div>
               <hr />
               <div className="panel-layers-content">{getHierarchy()}</div>
             </div>
           </div>
         </div>
         <div className="builder-right-column">
-          <div id="canvas-holder" className="canvas-holder shadow1">
+          
             <BuilderCanvas
               images={images}
               setActiveImage={setActiveImageId}
@@ -246,22 +245,17 @@ export default function Home1() {
               openViewer={() => setViewerOpened(true)}
               removeActiveImage={() => removeImageElement(activeImageId)}
             />
-            <div className="instruction">
-              <p>Instrukcja:</p>
-            </div>
-          </div>
-          
+         
         </div>
       </div>
       {viewerOpened && (
-            <div className="overlay">
-              <div className="viewer-canvas" id="viewer-canvas">
-                <button onClick={() => setViewerOpened(false)}>Close</button>
-                <ModelViewer canvasUrl={canvasUrl} />
-              </div>
-            </div>
-          )}
-
+        <div className="overlay">
+          <div className="viewer-canvas" id="viewer-canvas">
+            <button onClick={() => setViewerOpened(false)}>Close</button>
+            <ModelViewer canvasUrl={canvasUrl} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

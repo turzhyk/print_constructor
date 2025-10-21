@@ -20,7 +20,7 @@ i18n
 
     // Enables useful output in the browser’s
     // dev console.
-    debug: true,
+    debug: false,
 
     // Normally, we want `escapeValue: true` as it
     // ensures that i18next escapes any code in
@@ -44,7 +44,8 @@ i18n
           mug_editor: "Mug editor",
           upload_image:"Upload image",
           canvas:"Canvas",
-          see_in_3d:"See in 3D"
+          see_in_3d:"See in 3D",
+          layers: "Layers",
         },
       },
       // Arabic
@@ -54,7 +55,8 @@ i18n
           mug_editor:"Konstruktor kubków",
           upload_image:"Dodaj zdęcia",
           canvas:"Płótno",
-          see_in_3d:"Pokaź w 3D"
+          see_in_3d:"Pokaź w 3D",
+          layers:"Warstwy",
 
         },
       },
