@@ -6,30 +6,25 @@ import {
   Rect,
   Text,
   Transformer,
-  Circle,
 } from "react-konva";
 import React, { useState, useEffect, useRef, useReducer } from "react";
 
-import "./i18nconfig.ts";
+import "./i18nconfig";
 import { useTranslation } from "react-i18next";
 
 import Konva from "konva";
 import { NodeConfig, Node, KonvaEventObject } from "konva/lib/Node";
+import useTextureLinkStore from "./hooks/useTextureURL";
+import useActiveItemId from "./storage/useActiveItemId";
 
 const canvasSize = { x: 945, y: 405 };
 const BuilderCanvas = ({
   images,
-  setActiveImage,
-  activeImageId,
-  setUrl,
   openViewer,
   removeActiveImage,
   setLayerName,
 }: {
   images: ImageItem[];
-  activeImageId: string;
-  setActiveImage: (id: string) => void;
-  setUrl: (value: string) => void;
   openViewer: () => void;
   removeActiveImage: () => void;
   setLayerName: (value: string) => void;
@@ -43,6 +38,10 @@ const BuilderCanvas = ({
   }>({ italic: false, bold: false });
   const [editTextColor, setEditTextColor] = useState<string>("");
   const stageRef = React.useRef<Konva.Stage>(null);
+  const setUri = useTextureLinkStore((state) => state.setLink);
+
+  const activeItemId = useActiveItemId((state) => (state.id));
+  const setActiveItem = useActiveItemId((state) => (state.setId));
   const [activeImageProps, setActiveImageProps] = useState<{
     x: number;
     y: number;
@@ -61,7 +60,7 @@ const BuilderCanvas = ({
   const handleExport = () => {
     if (stageRef.current != null) {
       const uri = stageRef.current.toDataURL();
-      setUrl(uri);
+      setUri(uri);
     }
   };
   const handleFlip = () => {};
@@ -121,7 +120,7 @@ const BuilderCanvas = ({
   const getTextTooltip = (visible: boolean) => {
     if (!activeImageProps || !visible) return;
     const act = images.map((img) => {
-      if (img.id === activeImageId) return img.type;
+      if (img.id === activeItemId) return img.type;
     });
     if (act[0] != "text") return;
     const heightCM = (activeImageProps.height / canvasSize.y) * 9;
@@ -227,7 +226,7 @@ const BuilderCanvas = ({
         <button
           className="stage-3d-btn"
           onClick={() => {
-            setActiveImage("");
+            setActiveItem("");
 
             handleExport();
             openViewer();
@@ -253,7 +252,7 @@ const BuilderCanvas = ({
               width={10000}
               height={10000}
               fill={"white"}
-              onClick={() => setActiveImage("")}
+              onClick={() => setActiveItem("")}
             ></Rect>
 
             {images.map((f, i) => {
@@ -264,8 +263,8 @@ const BuilderCanvas = ({
                     id={f.id}
                     file={f.file}
                     type={f.type}
-                    setActiveImage={setActiveImage}
-                    isActive={activeImageId === f.id}
+                    setActiveImage={setActiveItem}
+                    isActive={activeItemId === f.id}
                     setActiveImageProps={setActiveImageProps}
                   />
                 );
@@ -274,8 +273,8 @@ const BuilderCanvas = ({
                   <CanvasText
                     key={f.id}
                     id={f.id}
-                    setActiveImage={setActiveImage}
-                    isActive={activeImageId === f.id}
+                    setActiveImage={setActiveItem}
+                    isActive={activeItemId === f.id}
                     text={editText}
                     size={editTextSize}
                     align="center"
@@ -290,9 +289,9 @@ const BuilderCanvas = ({
         </Stage>
       </div>
 
-      {getSizeTooltip(activeImageId !== "")}
-      {getToolsTooltip(activeImageId !== "")}
-      {getTextTooltip(activeImageId !== "")}
+      {getSizeTooltip(activeItemId !== "")}
+      {getToolsTooltip(activeItemId !== "")}
+      {getTextTooltip(activeItemId !== "")}
     </div>
   );
 };

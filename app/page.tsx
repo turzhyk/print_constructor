@@ -1,12 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import "./constructor.css";
-import BuilderCanvas from "./builder_canvas";
+import BuilderCanvas from "./BuilderCanvas";
 import "./i18nconfig.ts";
 import { useTranslation } from "react-i18next";
+import useTextureLinkStore from "./hooks/useTextureURL";
 
 import ModelViewer from "./3d_viewer";
 import i18next from "i18next";
+import useActiveItemId from "./storage/useActiveItemId";
+import LanguageSwitcher from "./Components/LanguageSwitcher";
+
 
 export type ImageItem = {
   id: string;
@@ -16,24 +20,18 @@ export type ImageItem = {
 };
 export default function Home1() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [lang, setLang] = useState<"en" | "pl">(() => {
-    if (typeof window === "undefined") return "en";
-    const val = window.localStorage.getItem("lang");
-    if (val === "en" || val === "pl") return val;
-    else return "en";
-  });
-
   const { t } = useTranslation();
+
   const [images, setImages] = useState<ImageItem[]>([
     { id: "Math.random().toString(36)", type: "text", name: "Sample text" },
   ]);
 
-  const [activeImageId, setActiveImageId] = useState<string>("");
-
-  const [canvasUrl, setCanvasUrl] = useState<string>("");
+  const activeItemId = useActiveItemId((state) => (state.id));
+  const setActiveItem = useActiveItemId((state) => (state.setId));
   const [viewerOpened, setViewerOpened] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const canvasUrl = useTextureLinkStore((state) => state.link);
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
@@ -78,7 +76,7 @@ export default function Home1() {
     console.log(value);
     setImages((images) =>
       images.map((img) => {
-        if (img.id === activeImageId) return { ...img, name: value };
+        if (img.id === activeItemId) return { ...img, name: value };
         else return img;
       })
     );
@@ -104,7 +102,11 @@ export default function Home1() {
     return images.toReversed().map((img, index) => (
       <div key={index} className="hierarchy-element">
         <img
-          src={img.type === "text"? "svg/text.svg":img.file && URL.createObjectURL(img.file) }
+          src={
+            img.type === "text"
+              ? "svg/text.svg"
+              : img.file && URL.createObjectURL(img.file)
+          }
           draggable={false}
         ></img>
         {img.name}
@@ -139,24 +141,22 @@ export default function Home1() {
   };
   const removeImageElement = (id: string) => {
     setImages((prev) => prev.filter((img) => img.id !== id));
-    if (id === activeImageId) setActiveImageId("");
+    if (id === activeItemId) setActiveItem("");
   };
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
-  const toggleLang = () => setLang(lang === "pl" ? "en" : "pl");
   useEffect(() => {
     const val = window.localStorage.getItem("theme");
     if (val === "dark" || val === "light") setTheme(val);
-    else return setTheme("light");
+    else setTheme("light");
+   
   }, []);
-  useEffect(() => {}, [images, canvasUrl]);
+  useEffect(() => {}, [images]);
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
-    localStorage.setItem("lang", lang);
-    i18next.changeLanguage(lang);
-  }, [theme, lang]);
+  }, [theme]);
   return (
     <div id="root">
       <div className="header">
@@ -176,22 +176,7 @@ export default function Home1() {
               className={theme! === "dark" ? "nn" : ""}
             />
           </button>
-          <div className="lang-btn">
-            <input
-              checked={lang === "pl"}
-              type="checkbox"
-              onChange={toggleLang}
-            ></input>
-            <label>
-              {" "}
-              <span className="flag flag-left">
-                <img src="/united-kingdom.png" />
-              </span>
-              <span className="flag flag-right">
-                <img src="/poland.png" />
-              </span>
-            </label>
-          </div>
+         <LanguageSwitcher/>
         </div>
       </div>
       <div className="builder-main">
@@ -235,17 +220,12 @@ export default function Home1() {
           </div>
         </div>
         <div className="builder-right-column">
-          
-            <BuilderCanvas
-              images={images}
-              setActiveImage={setActiveImageId}
-              activeImageId={activeImageId}
-              setUrl={setCanvasUrl}
-              setLayerName={(e) => setLayerName(e)}
-              openViewer={() => setViewerOpened(true)}
-              removeActiveImage={() => removeImageElement(activeImageId)}
-            />
-         
+          <BuilderCanvas
+            images={images}
+            setLayerName={(e) => setLayerName(e)}
+            openViewer={() => setViewerOpened(true)}
+            removeActiveImage={() => removeImageElement(activeItemId)}
+          />
         </div>
       </div>
       {viewerOpened && (
@@ -256,7 +236,7 @@ export default function Home1() {
           </div>
         </div>
       )}
-      <footer ></footer>
+      <footer></footer>
     </div>
   );
 }
