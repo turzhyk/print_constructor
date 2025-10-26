@@ -10,7 +10,8 @@ import ModelViewer from "./3d_viewer";
 import i18next from "i18next";
 import useActiveItemId from "./storage/useActiveItemId";
 import LanguageSwitcher from "./Components/LanguageSwitcher";
-
+import { BuilderItemType, useItemStore } from "./storage/useBuilderStore";
+import { LayersTab } from "./Components/EditorTabs/LayersTab";
 
 export type ImageItem = {
   id: string;
@@ -21,13 +22,13 @@ export type ImageItem = {
 export default function Home1() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const { t } = useTranslation();
+  const { items, addItem, removeItem, renameItem } = useItemStore();
+  
+  // const [images, setImages] = useState<ImageItem[]>([
+  //   { id: "Math.random().toString(36)", type: "text", name: "Sample text" },
+  // ]);
 
-  const [images, setImages] = useState<ImageItem[]>([
-    { id: "Math.random().toString(36)", type: "text", name: "Sample text" },
-  ]);
-
-  const activeItemId = useActiveItemId((state) => (state.id));
-  const setActiveItem = useActiveItemId((state) => (state.setId));
+  const { id: activeItemId, setId: setActiveItem } = useActiveItemId();
   const [viewerOpened, setViewerOpened] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -36,70 +37,39 @@ export default function Home1() {
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
-  async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    const files = event.currentTarget.files;
-    if (!files || files.length === 0) return;
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files?.length) return;
+    const file = event.target.files[0];
+    addItem(BuilderItemType.Image, file.name, file);
+  };
+  // async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+  //   const files = event.currentTarget.files;
+  //   if (!files || files.length === 0) return;
 
-    const newItems = await Promise.all(
-      Array.from(files).map(async (file) => {
-        return {
-          id: crypto.randomUUID(),
-          file,
-          x: 0,
-          y: 0,
-          rot: 0,
-          scale: 1,
-          type: "image",
-          name: file.name,
-        };
-      })
-    );
-    // setActiveImageId(newItems[0].id);
-    setImages((prev) => [...prev, ...newItems]);
-  }
+  //   const newItems = await Promise.all(
+  //     Array.from(files).map(async (file) => {
+  //       return {
+  //         id: crypto.randomUUID(),
+  //         file,
+  //         x: 0,
+  //         y: 0,
+  //         rot: 0,
+  //         scale: 1,
+  //         type: "image",
+  //         name: file.name,
+  //       };
+  //     })
+  //   );
+  //   // setActiveImageId(newItems[0].id);
+  //   setImages((prev) => [...prev, ...newItems]);
+  // }
 
   const handleAddText = () => {
-    setImages((prev) => [
-      ...prev,
-      {
-        id: crypto.randomUUID(),
-        x: 0,
-        y: 0,
-        rot: 0,
-        scale: 1,
-        type: "text",
-        name: "",
-      },
-    ]);
+    addItem(BuilderItemType.Text, "sample text");
   };
-  const setLayerName = (value: string) => {
-    console.log(value);
-    setImages((images) =>
-      images.map((img) => {
-        if (img.id === activeItemId) return { ...img, name: value };
-        else return img;
-      })
-    );
-  };
-  const handleArrowClick = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    i: number,
-    dir: number
-  ) => {
-    if (dir == 1) {
-      if (i == 0) return;
-      const newItems = [...images];
-      [newItems[i], newItems[i - 1]] = [newItems[i - 1], newItems[i]];
-      setImages(newItems);
-    } else if (dir == -1) {
-      if (images.length - 1 <= i) return;
-      const newItems = [...images];
-      [newItems[i], newItems[i + 1]] = [newItems[i + 1], newItems[i]];
-      setImages(newItems);
-    }
-  };
+  const setLayerName = (value: string) => renameItem(activeItemId, value);
   const getHierarchy = () => {
-    return images.toReversed().map((img, index) => (
+    return items.toReversed().map((img, index) => (
       <div key={index} className="hierarchy-element">
         <img
           src={
@@ -118,7 +88,7 @@ export default function Home1() {
             <img className="icon iconThemed" src="svg/trash.svg" />
           </button>
 
-          <div className="layer-arrows">
+          {/* <div className="layer-arrows">
             <button
               className="layer-arrow-btn"
               onClick={(e) => handleArrowClick(e, index, 1)}
@@ -134,39 +104,32 @@ export default function Home1() {
                 src="svg/arrow-up.svg"
               ></img>
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     ));
   };
-  const removeImageElement = (id: string) => {
-    setImages((prev) => prev.filter((img) => img.id !== id));
-    if (id === activeItemId) setActiveItem("");
-  };
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+  const removeImageElement = (id: string) => removeItem(id);
   useEffect(() => {
     const val = window.localStorage.getItem("theme");
     if (val === "dark" || val === "light") setTheme(val);
     else setTheme("light");
-   
   }, []);
-  useEffect(() => {}, [images]);
+  useEffect(() => {}, [items]);
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
   return (
     <div id="root">
-      <div className="header">
+      <div onClick={()=>handleAddText()} className="header">
         <span>
-          <img onClick={toggleTheme} src="dp_logo.jpeg" />
+          <img src="dp_logo.jpeg" />
           <h1>{t("mug_editor")}</h1>
         </span>
 
         <div className="header-buttons">
-          <button onClick={toggleTheme} className="theme-btn shadow1">
+          <button className="theme-btn shadow1">
             <img
               src={"svg/sun2.svg"}
               className={theme! === "dark" ? "" : "nn"}
@@ -176,7 +139,7 @@ export default function Home1() {
               className={theme! === "dark" ? "nn" : ""}
             />
           </button>
-         <LanguageSwitcher/>
+          <LanguageSwitcher />
         </div>
       </div>
       <div className="builder-main">
@@ -212,19 +175,12 @@ export default function Home1() {
                 <span className="panel-buttons-tooltip">Image Effects</span>
               </button>
             </div>
-            <div className="panel-layers">
-              <div className="panel-title">{t("layers")}</div>
-              <hr />
-              <div className="panel-layers-content">{getHierarchy()}</div>
-            </div>
+            <LayersTab/>
           </div>
         </div>
         <div className="builder-right-column">
           <BuilderCanvas
-            images={images}
-            setLayerName={(e) => setLayerName(e)}
             openViewer={() => setViewerOpened(true)}
-            removeActiveImage={() => removeImageElement(activeItemId)}
           />
         </div>
       </div>

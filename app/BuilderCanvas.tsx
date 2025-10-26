@@ -1,4 +1,4 @@
-import { ImageItem } from "./page";
+
 import {
   Stage,
   Layer,
@@ -16,18 +16,13 @@ import Konva from "konva";
 import { NodeConfig, Node, KonvaEventObject } from "konva/lib/Node";
 import useTextureLinkStore from "./hooks/useTextureURL";
 import useActiveItemId from "./storage/useActiveItemId";
+import { BuilderItemType, useItemStore } from "./storage/useBuilderStore";
 
 const canvasSize = { x: 945, y: 405 };
 const BuilderCanvas = ({
-  images,
   openViewer,
-  removeActiveImage,
-  setLayerName,
 }: {
-  images: ImageItem[];
   openViewer: () => void;
-  removeActiveImage: () => void;
-  setLayerName: (value: string) => void;
 }) => {
   const { t } = useTranslation();
   const [editText, setEditText] = useState<string>("Sample Text");
@@ -42,6 +37,8 @@ const BuilderCanvas = ({
 
   const activeItemId = useActiveItemId((state) => (state.id));
   const setActiveItem = useActiveItemId((state) => (state.setId));
+
+  const { items, addItem, removeItem, renameItem } = useItemStore();
   const [activeImageProps, setActiveImageProps] = useState<{
     x: number;
     y: number;
@@ -79,6 +76,10 @@ const BuilderCanvas = ({
   const getToolsTooltip = (visible: boolean) => {
     const stageDom = stageRef.current?.container();
     const rect = stageDom?.getBoundingClientRect() || { x: 0, y: 0 };
+    const handleRemoveBtn =()=>{
+      removeItem(activeItemId);
+      setActiveItem("");
+    }
     if (!activeImageProps || !visible) return;
     return (
       <div
@@ -88,7 +89,7 @@ const BuilderCanvas = ({
           left: activeImageProps.x + rect.x - 80,
         }}
       >
-        <button className="tooltip-btn" onClick={removeActiveImage}>
+        <button className="tooltip-btn" onClick={handleRemoveBtn}>
           <img className="" src="svg/trash.svg" />
         </button>
         <button className="tooltip-btn" onClick={handleFlip}>
@@ -118,11 +119,14 @@ const BuilderCanvas = ({
     );
   };
   const getTextTooltip = (visible: boolean) => {
+
     if (!activeImageProps || !visible) return;
-    const act = images.map((img) => {
-      if (img.id === activeItemId) return img.type;
-    });
-    if (act[0] != "text") return;
+    // const act = items.map((item) => {
+    //   if (item.id === activeItemId) return item;
+    // });
+    const activeItem = items.find(item => item.id == activeItemId);
+    console.log(activeItem);
+    if (activeItem?.type !== BuilderItemType.Text) return;
     const heightCM = (activeImageProps.height / canvasSize.y) * 9;
     const widthCM = (activeImageProps.width / canvasSize.x) * 21;
 
@@ -143,7 +147,7 @@ const BuilderCanvas = ({
           value={editText}
           onChange={(e) => {
             setEditText(e.target.value);
-            setLayerName(e.target.value);
+            renameItem(activeItemId,e.target.value);
           }}
         ></input>
         <span className="text-tooltip-fontsize">
@@ -209,7 +213,7 @@ const BuilderCanvas = ({
       height: document.getElementById("builder-canvas")?.clientHeight!,
     });
   }, []);
-  useEffect(() => {}, [activeImageProps]);
+  useEffect(() => {}, [activeImageProps, activeItemId]);
   return (
     <div id="canvas-holder" className="canvas-holder shadow1">
       <div className="stage-buttons">
@@ -255,8 +259,8 @@ const BuilderCanvas = ({
               onClick={() => setActiveItem("")}
             ></Rect>
 
-            {images.map((f, i) => {
-              if (f.type === "image")
+            {items.map((f, i) => {
+              if (f.type === BuilderItemType.Image)
                 return (
                   <CanvasImage
                     key={f.id}
