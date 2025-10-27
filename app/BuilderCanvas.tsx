@@ -20,6 +20,7 @@ import { useItemStore } from "./storage/useBuilderStore";
 import { BuilderItemType } from "./storage/BuilderItemType";
 import { BasicProps, TextProps, useItemPropsStorage } from "./storage/useItemPropsStorage";
 import { CanvasText } from "./Components/CanvasText";
+import { SizeTooltip } from "./Components/Tooltips/SizeTooltip";
 
 const canvasSize = { x: 945, y: 405 };
 const BuilderCanvas = ({
@@ -76,136 +77,137 @@ const BuilderCanvas = ({
       (textStyle.italic ? "italic " : "") + (textStyle.bold ? "bold " : "");
     return line;
   };
-  // const getToolsTooltip = (visible: boolean) => {
-  //   const stageDom = stageRef.current?.container();
-  //   const rect = stageDom?.getBoundingClientRect() || { x: 0, y: 0 };
-  //   const handleRemoveBtn =()=>{
-  //     removeItem(activeItemId);
-  //     setActiveItem("");
-  //   }
-  //   if (!activeImageProps || !visible) return;
-  //   return (
-  //     <div
-  //       className="tools-tooltip shadow1"
-  //       style={{
-  //         top: activeImageProps.y + rect.y + activeImageProps.height / 2 - 40,
-  //         left: activeImageProps.x + rect.x - 80,
-  //       }}
-  //     >
-  //       <button className="tooltip-btn" onClick={handleRemoveBtn}>
-  //         <img className="" src="svg/trash.svg" />
-  //       </button>
-  //       <button className="tooltip-btn" onClick={handleFlip}>
-  //         <img className="" src="svg/flip.svg" />
-  //       </button>
-  //     </div>
-  //   );
-  // };
-  // const getSizeTooltip = (visible: boolean) => {
-  //   if (!activeImageProps || !visible) return;
-  //   const heightCM = (activeImageProps.height / canvasSize.y) * 9;
-  //   const widthCM = (activeImageProps.width / canvasSize.x) * 21;
-  //   const line = heightCM.toFixed(1) + "cm x " + widthCM.toFixed(1) + "cm";
+  const getToolsTooltip = (visible: boolean) => {
+    const stageDom = stageRef.current?.container();
+    const rect = stageDom?.getBoundingClientRect() || { x: 0, y: 0 };
+    const handleRemoveBtn =()=>{
+      removeItem(activeItemId);
+      setActiveItem("");
+    }
+    if (!activeImageProps || !visible) return;
+    return (
+      <div
+        className="tools-tooltip shadow1"
+        style={{
+          top: activeImageProps.y + rect.y + activeImageProps.height / 2 - 40,
+          left: activeImageProps.x + rect.x - 80,
+        }}
+      >
+        <button className="tooltip-btn" onClick={handleRemoveBtn}>
+          <img className="" src="svg/trash.svg" />
+        </button>
+        <button className="tooltip-btn" onClick={handleFlip}>
+          <img className="" src="svg/flip.svg" />
+        </button>
+      </div>
+    );
+  };
+  const getSizeTooltip = (visible: boolean) => {
+    if (!activeImageProps || !visible) return;
+    const heightCM = (activeImageProps.height / canvasSize.y) * 9;
+    const widthCM = (activeImageProps.width / canvasSize.x) * 21;
+    const line = heightCM.toFixed(1) + "cm x " + widthCM.toFixed(1) + "cm";
 
-  //   const stageDom = stageRef.current?.container();
-  //   const rect = stageDom?.getBoundingClientRect() || { x: 0, y: 0 };
-  //   return (
-  //     <div
-  //       className="size-tooltip shadow1"
-  //       style={{
-  //         top: activeImageProps.y + rect.y + activeImageProps.height + 40,
-  //         left: activeImageProps.x + rect.x + activeImageProps.width / 2 - 80,
-  //       }}
-  //     >
-  //       <div>{line}</div>
-  //     </div>
-  //   );
-  // };
-  // const getTextTooltip = (visible: boolean) => {
+    const stageDom = stageRef.current?.container();
+    const rect = stageDom?.getBoundingClientRect() || { x: 0, y: 0 };
+    return (
+      <div
+        className="size-tooltip shadow1"
+        style={{
+          top: activeImageProps.y + rect.y + activeImageProps.height + 40,
+          left: activeImageProps.x + rect.x + activeImageProps.width / 2 - 80,
+        }}
+      >
+        <div>{line}</div>
+      </div>
+    );
+  };
+  const getTextTooltip = (visible: boolean) => {
     
-  //   if (!visible) return;
-  //   // const act = items.map((item) => {
-  //   //   if (item.id === activeItemId) return item;
-  //   // });
-  //   const activeItem = getPropById(activeItemId);
-  //   if (activeItem?.type !== BuilderItemType.Text) return;
-  //   const stageDom = stageRef.current?.container();
-  //   const rect = stageDom?.getBoundingClientRect() || { x: 0, y: 0 };
-  //   return (
-  //     <div
-  //       className="text-tooltip shadow1"
-  //       style={{
-  //         top: activeItem.basicProps.y + rect.y + activeItem.basicProps.height + 40,
-  //         left: activeItem.basicProps.x + rect.x + activeItem.basicProps.width / 2 - 80,
-  //       }}
-  //     >
-  //       <input
-  //         type="text"
-  //         id="editorTextField"
-  //         className="text"
-  //         value={editText}
-  //         onChange={(e) => {
-  //           setEditText(e.target.value);
-  //           renameItem(activeItemId,e.target.value);
-  //         }}
-  //       ></input>
-  //       <span className="text-tooltip-fontsize">
-  //         <img src={"/svg/font-size.svg"} draggable={false} />
-  //       </span>
+    if (!visible) return;
+    // const act = items.map((item) => {
+    //   if (item.id === activeItemId) return item;
+    // });
+    const {getItemById} = useItemPropsStorage();
+    const activeItem = getItemById(activeItemId);
+    if (activeItem?.type !== BuilderItemType.Text) return;
+    const stageDom = stageRef.current?.container();
+    const rect = stageDom?.getBoundingClientRect() || { x: 0, y: 0 };
+    return (
+      <div
+        className="text-tooltip shadow1"
+        style={{
+          top: activeItem.basicProps.y + rect.y + activeItem.basicProps.height + 40,
+          left: activeItem.basicProps.x + rect.x + activeItem.basicProps.width / 2 - 80,
+        }}
+      >
+        <input
+          type="text"
+          id="editorTextField"
+          className="text"
+          value={editText}
+          onChange={(e) => {
+            setEditText(e.target.value);
+            renameItem(activeItemId,e.target.value);
+          }}
+        ></input>
+        <span className="text-tooltip-fontsize">
+          <img src={"/svg/font-size.svg"} draggable={false} />
+        </span>
 
-  //       <input
-  //         className="text-tooltip-fontsize"
-  //         type="number"
-  //         value={editTextSize}
-  //         onChange={(e) => setEditTextSize(parseInt(e.target.value))}
-  //       />
-  //       {/* <button className="text-tooltip-size-btn">
-  //         <img
-  //           src={"/svg/arrow-down.svg"}
-  //           onClick={() => setEditTextSize(editTextSize - 1)}
-  //         />
-  //       </button>
-  //       <button className="text-tooltip-size-btn">
-  //         <img
-  //           src={"/svg/arrow-up.svg"}
-  //           onClick={() => setEditTextSize(editTextSize + 1)}
-  //         />
-  //       </button> */}
-  //       <span>
-  //         <button
-  //           className={"text-tooltip-btn " + (textStyle.bold ? "act" : "")}
-  //         >
-  //           <img
-  //             src={"/svg/bold.svg"}
-  //             onClick={() => handleStyleChange("bold")}
-  //           />
-  //         </button>
-  //         <button
-  //           className={"text-tooltip-btn " + (textStyle.italic ? "act" : "")}
-  //         >
-  //           <img
-  //             src={"/svg/italic.svg"}
-  //             onClick={() => handleStyleChange("italic")}
-  //           />
-  //         </button>
-  //         <span
-  //           className="text-tooltip-color"
-  //           style={{ backgroundColor: editTextColor }}
-  //           onClick={() =>
-  //             document.getElementById("text-tooltip-color-input")!.click()
-  //           }
-  //         >
-  //           <input
-  //             id="text-tooltip-color-input"
-  //             type="color"
-  //             className="text-tooltip-color"
-  //             onChange={(e) => setEditTextColor(e.target.value)}
-  //           />
-  //         </span>
-  //       </span>
-  //     </div>
-  //   );
-  // };
+        <input
+          className="text-tooltip-fontsize"
+          type="number"
+          value={editTextSize}
+          onChange={(e) => setEditTextSize(parseInt(e.target.value))}
+        />
+        {/* <button className="text-tooltip-size-btn">
+          <img
+            src={"/svg/arrow-down.svg"}
+            onClick={() => setEditTextSize(editTextSize - 1)}
+          />
+        </button>
+        <button className="text-tooltip-size-btn">
+          <img
+            src={"/svg/arrow-up.svg"}
+            onClick={() => setEditTextSize(editTextSize + 1)}
+          />
+        </button> */}
+        <span>
+          <button
+            className={"text-tooltip-btn " + (textStyle.bold ? "act" : "")}
+          >
+            <img
+              src={"/svg/bold.svg"}
+              onClick={() => handleStyleChange("bold")}
+            />
+          </button>
+          <button
+            className={"text-tooltip-btn " + (textStyle.italic ? "act" : "")}
+          >
+            <img
+              src={"/svg/italic.svg"}
+              onClick={() => handleStyleChange("italic")}
+            />
+          </button>
+          <span
+            className="text-tooltip-color"
+            style={{ backgroundColor: editTextColor }}
+            onClick={() =>
+              document.getElementById("text-tooltip-color-input")!.click()
+            }
+          >
+            <input
+              id="text-tooltip-color-input"
+              type="color"
+              className="text-tooltip-color"
+              onChange={(e) => setEditTextColor(e.target.value)}
+            />
+          </span>
+        </span>
+      </div>
+    );
+  };
   useEffect(() => {
     setStageSize({
       width: document.getElementById("builder-canvas")?.clientWidth!,
@@ -292,9 +294,9 @@ const BuilderCanvas = ({
         </Stage>
       </div>
 
-      {/* {getSizeTooltip(activeItemId !== "")}
+      {/* {getSizeTooltip(activeItemId !== "")} */}
       {getToolsTooltip(activeItemId !== "")}
-      {getTextTooltip(activeItemId !== "")} */}
+      {getTextTooltip(activeItemId !== "")}
     </div>
   );
 };
