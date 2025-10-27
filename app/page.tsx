@@ -21,8 +21,8 @@ export default function Home1() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const { t } = useTranslation();
   const { items, addItem, removeItem, renameItem } = useItemStore();
-  const {addItemProps} = useItemPropsStorage();
-
+  const addItemProps = useItemPropsStorage((state)=>state.addItemProps);
+  console.log("rr")
   const { id: activeItemId, setId: setActiveItem } = useActiveItemId();
   const [viewerOpened, setViewerOpened] = useState<boolean>(false);
 
