@@ -1,18 +1,6 @@
 import { create } from "zustand";
+import { BuilderItemType } from "./BuilderItemType";
 
-interface IBuilderItemDimentions {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-interface IBuilderItemProps{
-  dim:IBuilderItemDimentions;
-}
-export enum BuilderItemType {
-  Text = "text",
-  Image = "image",
-}
 type BuilderItem = {
   id: string;
   file?: File;
@@ -21,17 +9,17 @@ type BuilderItem = {
 };
 interface IBuilderItems {
   items: BuilderItem[];
-  addItem: (type: BuilderItemType, name: string, file?: File) => void;
+  addItem: (id:string,type: BuilderItemType, name: string, file?: File) => void;
   removeItem :(id:string) =>void;
   renameItem: (id:string, value:string) =>void; 
 }
 export const useItemStore = create<IBuilderItems>()((set) => ({
   items: [],
-  addItem: (type, name, file) =>
+  addItem: (id,type, name, file) =>
     set((state) => ({
       items: [
         ...state.items,
-        { id: crypto.randomUUID(), name: name, type, file: file },
+        { id: id, name: name, type, file: file },
       ],
     })),
   removeItem: (id: string) =>
