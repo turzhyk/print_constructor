@@ -7,6 +7,7 @@ import {
 } from "../storage/useItemPropsStorage";
 import { Text, Transformer } from "react-konva";
 import useActiveItemId from "../storage/useActiveItemId";
+
 export const CanvasText = ({
   id,
   isActive,
@@ -16,7 +17,7 @@ export const CanvasText = ({
 }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const { setId: setActiveItem } = useActiveItemId();
-  const {setBasicProps} = useItemPropsStorage();
+  const setBasicProps = useItemPropsStorage((s)=>s.setBasicProps);
   const [tempProps, setTempProps] = useState<{
     x: number;
     y: number;
