@@ -13,7 +13,7 @@ export const SizeTooltip = ({
   if (!activeImageProps) return;
   const heightCM = (activeImageProps.height / 100) * 9;
   const widthCM = (activeImageProps.width / 100) * 21;
-  const line = heightCM.toFixed(1) + "cm x " + widthCM.toFixed(1) + "cm";
+  const line = heightCM.toFixed(1) + "cm x " + widthCM.toFixed(1) + "cm "+ activeImageProps.rotation.toFixed() + "°";
 
   if (stageRef === null) return;
   const stageDom = stageRef.current?.container();

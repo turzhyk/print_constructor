@@ -1,0 +1,2 @@
+1 implement multiple images upload
+2 make canvas size storage

@@ -7,23 +7,23 @@ import { useTranslation } from "react-i18next";
 import useTextureLinkStore from "./hooks/useTextureURL";
 
 import ModelViewer from "./3d_viewer";
-import i18next from "i18next";
-import useActiveItemId from "./storage/useActiveItemId";
 import LanguageSwitcher from "./Components/LanguageSwitcher";
 import { useItemStore } from "./storage/useBuilderStore";
 import { LayersTab } from "./Components/EditorTabs/LayersTab";
-import { ImageProps, TextProps, useItemPropsStorage } from "./storage/useItemPropsStorage";
+import {
+  ImageProps,
+  TextProps,
+  useItemPropsStorage,
+} from "./storage/useItemPropsStorage";
 import { BuilderItemType } from "./storage/BuilderItemType";
-import { color } from "three/tsl";
-
 
 export default function Home1() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const { t } = useTranslation();
-  const { items, addItem, removeItem, renameItem } = useItemStore();
-  const addItemProps = useItemPropsStorage((state)=>state.addItemProps);
-  console.log("rr")
-  const { id: activeItemId, setId: setActiveItem } = useActiveItemId();
+  const { items, addItem} = useItemStore();
+  const addItemProps = useItemPropsStorage((state) => state.addItemProps);
+  console.log("RERENDER");
+
   const [viewerOpened, setViewerOpened] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -36,15 +36,20 @@ export default function Home1() {
     if (!event.target.files?.length) return;
     const file = event.target.files[0];
     const id = crypto.randomUUID();
-    addItem(id,BuilderItemType.Image, file.name, file);
+    addItem(id, BuilderItemType.Image, file.name, file);
     const props = {} as ImageProps;
     addItemProps(id, BuilderItemType.Image, props);
   };
 
   const handleAddText = () => {
     const id = crypto.randomUUID();
-    addItem(id,BuilderItemType.Text, "sample text");
-    const props = {color:"#FFFFF", value:"text", size:16,style:"normal"} as TextProps;
+    addItem(id, BuilderItemType.Text, "sample text");
+    const props = {
+      color: "#000000ff",
+      value: "text2",
+      size: 16,
+      style: "normal",
+    } as TextProps;
     addItemProps(id, BuilderItemType.Text, props);
   };
   useEffect(() => {
@@ -59,7 +64,7 @@ export default function Home1() {
   }, [theme]);
   return (
     <div id="root">
-      <div onClick={()=>handleAddText()} className="header">
+      <div onClick={() => handleAddText()} className="header">
         <span>
           <img src="dp_logo.jpeg" />
           <h1>{t("mug_editor")}</h1>
@@ -112,13 +117,11 @@ export default function Home1() {
                 <span className="panel-buttons-tooltip">Image Effects</span>
               </button>
             </div>
-            <LayersTab/>
+            <LayersTab />
           </div>
         </div>
         <div className="builder-right-column">
-          <BuilderCanvas
-            openViewer={() => setViewerOpened(true)}
-          />
+          <BuilderCanvas openViewer={() => setViewerOpened(true)} />
         </div>
       </div>
       {viewerOpened && (

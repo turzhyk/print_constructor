@@ -9,18 +9,22 @@ type BuilderItem = {
 };
 interface IBuilderItems {
   items: BuilderItem[];
-  addItem: (id:string,type: BuilderItemType, name: string, file?: File) => void;
-  removeItem :(id:string) =>void;
-  renameItem: (id:string, value:string) =>void; 
+  addItem: (
+    id: string,
+    type: BuilderItemType,
+    name: string,
+    file?: File
+  ) => void;
+  removeItem: (id: string) => void;
+  renameItem: (id: string, value: string) => void;
+  getItemById: (id: string) => BuilderItem | undefined;
 }
-export const useItemStore = create<IBuilderItems>()((set) => ({
+export const useItemStore = create<IBuilderItems>()((set, get) => ({
   items: [],
-  addItem: (id,type, name, file) =>
+  getItemById: (id) => get().items.find((item) => item.id === id),
+  addItem: (id, type, name, file) =>
     set((state) => ({
-      items: [
-        ...state.items,
-        { id: id, name: name, type, file: file },
-      ],
+      items: [...state.items, { id: id, name: name, type, file: file }],
     })),
   removeItem: (id: string) =>
     set((state) => ({

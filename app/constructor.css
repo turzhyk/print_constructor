@@ -172,7 +172,9 @@ footer{
 .builder-main {
   display: flex;
   justify-content: center;
+  margin: auto;
   width: 100%;
+  max-width: 100rem;
   flex-grow: 1;
   /* height: 100%; */
   /* justify-content: space-between; */
@@ -191,7 +193,7 @@ footer{
 .builder-right-column {
   margin: 1rem;
   margin-left: 0.5rem;
-  width: 100%;
+  width: 80%;
   flex: 1;
   
 }

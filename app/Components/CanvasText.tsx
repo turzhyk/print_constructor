@@ -16,8 +16,12 @@ export const CanvasText = ({
   isActive: boolean;
 }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const { setId: setActiveItem } = useActiveItemId();
-  const setBasicProps = useItemPropsStorage((s)=>s.setBasicProps);
+  const setActiveItem = useActiveItemId((s) => s.setId);
+  const setBasicProps = useItemPropsStorage((s) => s.setBasicProps);
+  const textProps = useItemPropsStorage(
+    (state) => state.getItemById(id)?.props as TextProps
+  );
+
   const [tempProps, setTempProps] = useState<{
     x: number;
     y: number;
@@ -29,11 +33,12 @@ export const CanvasText = ({
   const trRef = useRef<any>(null);
   const updatePos = () => {
     const absPos = textRef.current.getClientRect();
-     setBasicProps(id, {
+    setBasicProps(id, {
       x: absPos.x,
       y: absPos.y,
       height: absPos.height,
       width: absPos.width,
+      rotation: 0,
     });
   };
 
@@ -44,7 +49,6 @@ export const CanvasText = ({
     setTempProps({ ...tempProps, width: width, height: height });
     node.scaleX(1);
     node.scaleY(1);
-    console.log(node.getBoundingClientRect);
     updatePos();
   };
   const applyProps = () => {
@@ -56,14 +60,16 @@ export const CanvasText = ({
       trRef.current.getLayer()?.batchDraw();
     }
   }, [isActive]);
+
+  // useEffect(()=>{console.log(getItemById(id))},[textProps]);
   return (
     <React.Fragment>
       <Text
         ref={textRef}
-        text="HUJ"
-      //   text={textProps.value}
-      //   fontSize={textProps.size}
-      //   fill={textProps.color}
+        text={textProps.value}
+        //   text={textProps.value}
+        fontSize={textProps.size}
+        fill={textProps.color}
         x={tempProps.x}
         y={tempProps.y}
         draggable
@@ -90,21 +96,31 @@ export const CanvasText = ({
           rotationSnaps={[0, 90, 180, 270]}
           rotationSnapTolerance={5}
           anchorCornerRadius={20}
-          anchorSize={15}
+          anchorSize={10}
           anchorStroke={"#3D50FC"}
           borderStroke={"#3D50FC"}
           rotateLineVisible={false}
           keepRatio={false}
-          enabledAnchors={[
-            "top-left",
-            "top-right",
-            "bottom-left",
-            "bottom-right",
-          ]}
+          // enabledAnchors={[
+          //   "top-left",
+          //   "top-right",
+          //   "bottom-left",
+          //   "bottom-right",
+          // ]}
           anchorStyleFunc={(anchor) => {
+            anchor.hitStrokeWidth(20);
             if (anchor.hasName("rotater")) {
               anchor.size({ width: 25, height: 25 });
               anchor.offsetX(12);
+            } else {
+              const name = anchor.name();
+
+              if (
+                name.includes("middle") || // middle-left, middle-right
+                name.includes("center") // top-center, bottom-center
+              ) {
+                anchor.opacity(0);
+              }
             }
           }}
           onTransform={handleTransform}
