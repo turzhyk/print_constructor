@@ -174,7 +174,7 @@ footer{
   justify-content: center;
   margin: auto;
   width: 100%;
-  max-width: 100rem;
+  max-width: 80rem;
   flex-grow: 1;
   /* height: 100%; */
   /* justify-content: space-between; */
@@ -185,6 +185,7 @@ footer{
   width:  auto;
   /* height: 100%; */
   /* min-width: 16rem; */
+  min-width: 17rem;
   max-width: 20rem;
   flex: 1;
   display: flex;
@@ -438,7 +439,7 @@ border-radius: var(--main-border-radius);
   flex-direction: column;
   z-index: 2;
   margin: auto;
-  height: 5rem;
+  height: auto;
   padding: 0.2rem;
 }
 .tooltip-btn {
@@ -453,6 +454,7 @@ border-radius: var(--main-border-radius);
   height: 1.6rem;
   margin: auto;
 }
+
 .text-tooltip {
   color: black;
   position: absolute;
@@ -589,7 +591,58 @@ input.text-tooltip-color {
   max-width: 100%;
   max-height: 100%;
 }
-
+.canvas-footer{
+  display: flex;
+  /* justify-content: space-between; */
+  height: 15rem;
+  margin-top: 1rem;
+}
+.canvas-footer-viewer{
+  position: relative;
+  cursor: pointer;
+}
+.canvas-footer .vl{
+  height: 80%;
+  flex: 0;
+  outline: 1px solid var(--outline1);
+  margin: auto;
+}
+.canvas-footer-viewer button{
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  top: 1rem;
+  right: 1rem;
+  transition-duration: 0.1s;
+}
+.canvas-footer-viewer:hover button{
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  top: 1rem;
+  right: 1rem;
+  transform: scale(1.4);
+}
+.canvas-footer-viewer img{
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: auto;
+  filter: var(--icon-filter);
+}
+.canvas-footer-tools{
+  flex-grow: 1;
+}
+button.download-jpg{
+  width: 10rem;
+  height: 3rem;
+  border-radius: var(--main-border-radius);
+ outline: 1px solid var(--panel-btn-outline);
+ transition-duration: 0.1s;
+ cursor: pointer;
+}
+button.download-jpg:hover{
+  transform: scale(1.05);
+}
 .stage-buttons {
   height: 3rem;
   gap: 0.8rem;

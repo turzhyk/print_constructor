@@ -64,14 +64,14 @@ export default function Home1() {
   }, [theme]);
   return (
     <div id="root">
-      <div onClick={() => handleAddText()} className="header">
+      <div  className="header">
         <span>
           <img src="dp_logo.jpeg" />
           <h1>{t("mug_editor")}</h1>
         </span>
 
         <div className="header-buttons">
-          <button className="theme-btn shadow1">
+          <button className="theme-btn shadow1" onClick={()=>setTheme(theme! === "dark" ? "light" : "dark")}>
             <img
               src={"svg/sun2.svg"}
               className={theme! === "dark" ? "" : "nn"}

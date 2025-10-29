@@ -14,6 +14,8 @@ import { SizeTooltip } from "./Components/Tooltips/SizeTooltip";
 import { ToolsTooltip } from "./Components/Tooltips/ToolsTooltip";
 import { TextTooltip } from "./Components/Tooltips/TextTooltip";
 import { CanvasImage } from "./Components/CanvasImage";
+import { BuilderCanvasFooter } from "./Components/BuilderCanvasFooter";
+import { useItemPropsStorage } from "./storage/useItemPropsStorage";
 
 const canvasSize = { x: 945, y: 405 };
 const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
@@ -26,6 +28,7 @@ const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
   const stageRef = React.useRef<Konva.Stage>(null);
   const setUri = useTextureLinkStore((state) => state.setLink);
 
+
   const { id: activeItemId, setId: setActiveItem } = useActiveItemId();
 
   const items = useItemStore((s) => s.items);
@@ -36,7 +39,8 @@ const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
 
   const handleExport = () => {
     if (stageRef.current != null) {
-      const uri = stageRef.current.toDataURL();
+      const uri = stageRef.current.toDataURL({pixelRatio:4});
+      console.log(uri);
       setUri(uri);
     }
   };
@@ -47,18 +51,17 @@ const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
       [style]: !prev[style],
     }));
   };
-  
-
   useEffect(() => {
     setStageSize({
       width: document.getElementById("builder-canvas")?.clientWidth!,
       height: document.getElementById("builder-canvas")?.clientHeight!,
     });
+  
   }, []);
-  useEffect(() => {}, [activeItemId]);
+  useEffect(() => { handleExport();}, [activeItemId]);
   return (
     <div id="canvas-holder" className="canvas-holder shadow1">
-      <div className="stage-buttons">
+      {/* <div className="stage-buttons">
         <span className="cup-type-panel">
           <span>Podstawowy kubek:</span>
           <button>
@@ -80,8 +83,7 @@ const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
           <span>{t("see_in_3d")}</span>
           <img src="svg/cube.svg" />
         </button>
-      </div>
-
+      </div> */}
       <div className="builder-canvas" id="builder-canvas">
         <Stage
           width={stageSize.width}
@@ -122,6 +124,7 @@ const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
           </Layer>
         </Stage>
       </div>
+     <BuilderCanvasFooter/>
       {activeItemId !== "" && (
         <SizeTooltip targetId={activeItemId} stageRef={stageRef} />
       )}

@@ -38,6 +38,7 @@ interface ItemsProps {
   setItalic: (id: string, value: boolean) => void;
   setBold: (id: string, value: boolean) => void;
   getItemById: (id: string) => IBuilderItemProps | undefined;
+  duplicateItemProps: (id: string, newId: string) => void;
 }
 export const useItemPropsStorage = create<ItemsProps>()((set, get) => ({
   itemsProps: {},
@@ -155,6 +156,18 @@ export const useItemPropsStorage = create<ItemsProps>()((set, get) => ({
             ...item,
             props: { ...item.props, bold: value },
           },
+        },
+      };
+    }),
+  duplicateItemProps: (id, newId) =>
+    set((state) => {
+      const newItem = state.itemsProps[id];
+      if (!newItem) return state;
+      const newItem2 = { ...newItem, id: newId ? newId : newId };
+      return {
+        itemsProps: {
+          ...state.itemsProps,
+          [newId]: newItem2,
         },
       };
     }),

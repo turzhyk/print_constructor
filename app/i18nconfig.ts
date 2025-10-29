@@ -46,6 +46,7 @@ i18n
           canvas:"Canvas",
           see_in_3d:"See in 3D",
           layers: "Layers",
+          download_jpg:"Download .jpg",
         },
       },
       // Arabic
@@ -57,7 +58,7 @@ i18n
           canvas:"Płótno",
           see_in_3d:"Pokaź w 3D",
           layers:"Warstwy",
-
+            download_jpg:"Pobierz .jpg",
         },
       },
     },

@@ -5,6 +5,10 @@ interface IItemId {
 }
 const useActiveItemId = create<IItemId>()((set) => ({
   id: "",
-  setId: (value) => set((state) => ({ id: value })),
+  setId: (value) =>
+    set((state) => {
+      // console.log(value);
+      return { id: value };
+    }),
 }));
 export default useActiveItemId;

@@ -4,19 +4,19 @@ import { useItemPropsStorage } from "@/app/storage/useItemPropsStorage";
 import Konva from "konva";
 
 export const ToolsTooltip = ({
-
   targetId,
   stageRef,
 }: {
-
   targetId: string;
   stageRef: React.RefObject<Konva.Stage | null>;
 }) => {
-  const {getItemById} = useItemPropsStorage();
+  const { getItemById } = useItemPropsStorage();
   const activeImageProps = getItemById(targetId)?.basicProps;
-  
+  const duplicateItemProps = useItemPropsStorage((s) => s.duplicateItemProps);
 
   const removeItem = useItemStore((s) => s.removeItem);
+  const duplicateItem = useItemStore((s) => s.duplicateItem);
+
   const activeItemId = useActiveItemId((s) => s.id);
   const setActiveItem = useActiveItemId((s) => s.setId);
 
@@ -27,8 +27,14 @@ export const ToolsTooltip = ({
     removeItem(activeItemId);
     setActiveItem("");
   };
+  const handleDuplicate = () => {
+    const newId = crypto.randomUUID();
+    duplicateItem(targetId, newId);
+    duplicateItemProps(targetId, newId);
+    setActiveItem(newId);
+  };
   const handleFlip = () => {};
-  if (!activeImageProps ) return;
+  if (!activeImageProps) return;
   return (
     <div
       className="tools-tooltip shadow1"
@@ -42,6 +48,9 @@ export const ToolsTooltip = ({
       </button>
       <button className="tooltip-btn" onClick={handleFlip}>
         <img className="" src="svg/flip.svg" />
+      </button>
+      <button className="tooltip-btn" onClick={handleDuplicate}>
+        <img className="" src="svg/duplicate2.svg" />
       </button>
     </div>
   );

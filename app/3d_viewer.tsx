@@ -7,20 +7,21 @@ import { Canvas } from "@react-three/fiber";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { TextureLoader } from "three";
 import { createRoot } from "react-dom/client";
-
-
+import { useItemPropsStorage } from "./storage/useItemPropsStorage";
 
 type BoxProps = ThreeElements["mesh"] & {
   url?: string; // твой новый проп
 };
 
-const viewerCamera = new THREE.PerspectiveCamera(35, 1000 / 1000, 1, 1000);
+const viewerCamera = new THREE.PerspectiveCamera(25, 1, 1, 1000);
 viewerCamera.position.set(0, 2, -10);
 viewerCamera.lookAt(0, -1, 0);
 
 
 const ModelViewer = ({ canvasUrl }: { canvasUrl: string }) => {
+  const itemsProps = useItemPropsStorage(s=>s.itemsProps);
   // if (canvasUrl === "") return null;
+  useEffect(()=>{},[itemsProps]);
   return (
     <Canvas camera={viewerCamera}>
       <ambientLight intensity={Math.PI / 10} />

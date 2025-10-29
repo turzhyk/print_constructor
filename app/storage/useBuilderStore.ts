@@ -17,6 +17,8 @@ interface IBuilderItems {
   ) => void;
   removeItem: (id: string) => void;
   renameItem: (id: string, value: string) => void;
+  duplicateItem: (id: string, newId: string) => void;
+
   getItemById: (id: string) => BuilderItem | undefined;
 }
 export const useItemStore = create<IBuilderItems>()((set, get) => ({
@@ -36,4 +38,11 @@ export const useItemStore = create<IBuilderItems>()((set, get) => ({
         item.id === id ? { ...item, name: value } : item
       ),
     })),
+  duplicateItem: (id, newId) =>
+    set((state) => {
+      const newItem = state.items.find((i) => i.id === id);
+      if (!newItem) return {items:state.items};
+      const newItem2 = { ...newItem, id: newId};
+      return { items: [...state.items, newItem2] };
+    }),
 }));

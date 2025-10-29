@@ -28,6 +28,7 @@ export const CanvasImage = ({
   });
   const { setId:setActiveItemId, id:activeItemId } = useActiveItemId();
   const  setBasicProps  = useItemPropsStorage((s)=>s.setBasicProps);
+  const basicProps = useItemPropsStorage((s)=>s.getItemById(id)?.basicProps);
   const [tempProps, setTempProps] = useState<{
     x: number;
     y: number;
