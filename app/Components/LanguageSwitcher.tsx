@@ -22,10 +22,10 @@ export default function LanguageSwitcher() {
       <label>
         {" "}
         <span className="flag flag-left">
-          <img src="/united-kingdom.png" />
+          <img src="united-kingdom.png" />
         </span>
         <span className="flag flag-right">
-          <img src="/poland.png" />
+          <img src="poland.png" />
         </span>
       </label>
     </div>

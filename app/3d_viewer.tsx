@@ -38,11 +38,11 @@ export function Box({ url, ...props }: BoxProps) {
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
   useFrame((state, delta) => (meshRef.current.rotation.y += delta));
-  const gltf = useLoader(GLTFLoader, "/cup.gltf");
-  const gltf2 = useLoader(GLTFLoader, "/cup_print.gltf");
-  const model_handle = useLoader(GLTFLoader, "/cup_handle.gltf");
-  const model_inner = useLoader(GLTFLoader, "/cup_inner.gltf");
-  const model_inshad = useLoader(GLTFLoader, "/cup_in_shad.gltf");
+  const gltf = useLoader(GLTFLoader, "cup.gltf");
+  const gltf2 = useLoader(GLTFLoader, "cup_print.gltf");
+  const model_handle = useLoader(GLTFLoader, "cup_handle.gltf");
+  const model_inner = useLoader(GLTFLoader, "cup_inner.gltf");
+  const model_inshad = useLoader(GLTFLoader, "cup_in_shad.gltf");
 
   const colorMap = useLoader(TextureLoader, url ? url : "cup_normal.png");
   const normalMap = useLoader(TextureLoader, "cup_normal.png");
