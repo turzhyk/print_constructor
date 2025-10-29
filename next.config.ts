@@ -8,8 +8,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // basePath: isProd ? "/print_constructor" : "",
-  // assetPrefix: isProd ? "/print_constructor/" : "",
+  trailingSlash: true,
 
 };
 
