@@ -1,33 +1,29 @@
-name: Deploy Next.js to GitHub Pages
-
+name: Deploy to GitHub-Pages
 on:
   push:
     branches:
-      - main  # или master, если у тебя основная ветка master
-
+      - main
 jobs:
-  build-deploy:
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 20
-
+          node-version: 16.x
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
       - name: Install dependencies
         run: npm install
-
-      - name: Build Next.js
-        run: |
-          npm run build
-          npm run export
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v6
+      - name: Build project
+        run: npm run build
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+          token: ${{ secrets.GITHUB_TOKEN }}
+          folder: ./build
+          branch: gh-pages
+          single-commit: true
