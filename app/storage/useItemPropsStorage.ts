@@ -14,6 +14,8 @@ export interface TextProps {
   size: number;
   color: string;
   style: string;
+  italic: boolean;
+  bold: boolean;
 }
 interface IBuilderItemProps {
   id: string;
@@ -28,31 +30,31 @@ interface ItemsProps {
     type: BuilderItemType,
     specificProps: TextProps | ImageProps
   ) => void;
-  //   setPos: (id: string, x: number, y: number) => void;
-  //   setScale: (id: string, x: number, y: number) => void;
   setTextValue: (id: string, value: string) => void;
   setTextColor: (id: string, color: string) => void;
-    setTextSize: (id: string, size: number) => void;
+  setTextSize: (id: string, size: number) => void;
   //   setTextStyle: (id: string, style: string) => void;
   setBasicProps: (id: string, value: BasicProps) => void;
+  setItalic: (id: string, value: boolean) => void;
+  setBold: (id: string, value: boolean) => void;
   getItemById: (id: string) => IBuilderItemProps | undefined;
-  //    setProp: (id: string, propName: string, value: any) => void;
 }
 export const useItemPropsStorage = create<ItemsProps>()((set, get) => ({
   itemsProps: {},
 
-  addItemProps: (id, type, specificProps) =>{
+  addItemProps: (id, type, specificProps) => {
     set((state) => ({
       itemsProps: {
         ...state.itemsProps,
         [id]: {
           id,
           type,
-          basicProps: { x: 0, y: 0, width: 100, height: 100, rotation:0 },
+          basicProps: { x: 0, y: 0, width: 100, height: 100, rotation: 0 },
           props: specificProps,
         },
       },
-    }))},
+    }));
+  },
   //   setPos: (id: string, x: number, y: number) =>
   //     set((state) => ({
   //       itemsProps: state.itemsProps.map((item) =>
@@ -81,19 +83,7 @@ export const useItemPropsStorage = create<ItemsProps>()((set, get) => ({
       };
     }),
   getItemById: (id) => get().itemsProps[id],
-  //   setScale: (id: string, x: number, y: number) =>
-  //     set((state) => ({
-  //       itemsProps: state.itemsProps.map((item) =>
-  //         item.id === id ? {
-  //             ...item,
-  //             basicProps: {
-  //               ...item.basicProps,
-  //               width: x,
-  //               height: y,
-  //             },
-  //           } : item
-  //       ),
-  //     })),
+
   setTextValue: (id, value) =>
     set((state) => {
       const item = state.itemsProps[id];
@@ -123,7 +113,7 @@ export const useItemPropsStorage = create<ItemsProps>()((set, get) => ({
         },
       };
     }),
-    setTextSize: (id, value) =>
+  setTextSize: (id, value) =>
     set((state) => {
       const item = state.itemsProps[id];
       if (!item) return state;
@@ -139,29 +129,33 @@ export const useItemPropsStorage = create<ItemsProps>()((set, get) => ({
       };
     }),
 
-  //   setTextSize: (id, size) =>
-  //     set((state) => ({
-  //       itemsProps: state.itemsProps.map((item) => {
-  //         if (item.id === id && item.type === "text") {
-  //           return {
-  //             ...item,
-  //             props: { ...item.props, size } as TextProps,
-  //           };
-  //         }
-  //         return item;
-  //       }),
-  //     })),
-
-  //   setTextStyle: (id, style) =>
-  //     set((state) => ({
-  //       itemsProps: state.itemsProps.map((item) => {
-  //         if (item.id === id && item.type === "text") {
-  //           return {
-  //             ...item,
-  //             props: { ...item.props, style } as TextProps,
-  //           };
-  //         }
-  //         return item;
-  //       }),
-  //     })),
+  setItalic: (id, value) =>
+    set((state) => {
+      const item = state.itemsProps[id];
+      if (!item) return state;
+      return {
+        itemsProps: {
+          ...state.itemsProps,
+          [id]: {
+            ...item,
+            props: { ...item.props, italic: value },
+          },
+        },
+      };
+    }),
+  setBold: (id, value) =>
+    set((state) => {
+      const item = state.itemsProps[id];
+      if (!item) return state;
+      // console.log(value);
+      return {
+        itemsProps: {
+          ...state.itemsProps,
+          [id]: {
+            ...item,
+            props: { ...item.props, bold: value },
+          },
+        },
+      };
+    }),
 }));

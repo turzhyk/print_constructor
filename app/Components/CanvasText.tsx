@@ -54,6 +54,12 @@ export const CanvasText = ({
   const applyProps = () => {
     // setBasicProps(id, tempProps);
   };
+  const getStyleString = () => {
+      if (!textProps.bold && !textProps.italic) return "normal";
+      const line =
+        (textProps.italic ? "italic " : "") + (textProps.bold ? "bold " : "");
+      return line;
+    };
   useEffect(() => {
     if (trRef.current && textRef.current) {
       trRef.current.nodes([textRef.current]);
@@ -73,7 +79,7 @@ export const CanvasText = ({
         x={tempProps.x}
         y={tempProps.y}
         draggable
-        fontStyle={"normal"}
+        fontStyle={getStyleString()}
         width={tempProps.width}
         height={tempProps.height}
         align={"center"}

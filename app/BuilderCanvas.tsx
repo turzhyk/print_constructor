@@ -47,12 +47,7 @@ const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
       [style]: !prev[style],
     }));
   };
-  const getStyleString = () => {
-    if (!textStyle.bold && !textStyle.italic) return "normal";
-    const line =
-      (textStyle.italic ? "italic " : "") + (textStyle.bold ? "bold " : "");
-    return line;
-  };
+  
 
   useEffect(() => {
     setStageSize({
