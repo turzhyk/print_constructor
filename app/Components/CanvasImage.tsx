@@ -15,7 +15,7 @@ export const CanvasImage = ({
   isActive: boolean;
 }) => {
   const [img, setImg] = useState<HTMLImageElement | null>(null);
-  const getItemById =  useItemStore((s) => s.getItemById);
+  const getItemById = useItemStore((s) => s.getItemById);
   const builderItem = getItemById(id);
 
   const [imgScale, setImgScale] = useState<{ x: number; y: number }>({
@@ -26,23 +26,28 @@ export const CanvasImage = ({
     x: 1,
     y: 1,
   });
-  const { setId:setActiveItemId, id:activeItemId } = useActiveItemId();
-  const  setBasicProps  = useItemPropsStorage((s)=>s.setBasicProps);
-  const basicProps = useItemPropsStorage((s)=>s.getItemById(id)?.basicProps);
+  const { setId: setActiveItemId, id: activeItemId } = useActiveItemId();
+  const setBasicProps = useItemPropsStorage((s) => s.setBasicProps);
+  const basicProps = useItemPropsStorage((s) => s.getItemById(id)?.basicProps);
   const [tempProps, setTempProps] = useState<{
     x: number;
     y: number;
     width: number;
     height: number;
-  }>({ x: 100, y: 100, width: 100, height: 100 });
+  }>({
+    x: basicProps ? basicProps.x : 0,
+    y: basicProps ? basicProps.y :0,
+    width:  600,
+    height:  600,
+  });
   const imgRef = useRef<any>(null);
   const trRef = useRef<any>(null);
-//   const rotatorIcon = new window.Image();
-//   rotatorIcon.src = "/svg/rotate.svg";
+  //   const rotatorIcon = new window.Image();
+  //   rotatorIcon.src = "/svg/rotate.svg";
 
   function handleDrag(e: KonvaEventObject<MouseEvent, Node<NodeConfig>>) {
-//     const node = e.target;
-//     const abs = node.getClientRect();
+    //     const node = e.target;
+    //     const abs = node.getClientRect();
 
     if (!isActive) setActiveItemId(id);
 
@@ -51,6 +56,9 @@ export const CanvasImage = ({
   const updateProps = () => {
     if (imgRef === null) return;
     const absPos = imgRef.current.getClientRect();
+    //const node = imgRef.current.node.width;
+    const  attrs = imgRef.current.attrs;
+    console.log(attrs.scaleX);
     const rot = imgRef.current.getAbsoluteRotation();
     setBasicProps(id, {
       x: absPos.x,
@@ -107,7 +115,7 @@ export const CanvasImage = ({
   useEffect(() => {
     if (trRef.current && imgRef.current) {
       trRef.current.nodes([imgRef.current]);
-      trRef.current.getLayer()?.batchDraw(); 
+      trRef.current.getLayer()?.batchDraw();
     }
   }, [isActive]);
 
@@ -117,17 +125,19 @@ export const CanvasImage = ({
     <React.Fragment>
       <Image
         image={img}
-      //   x={canvasSize.x / 2}
-      //   y={canvasSize.y / 2}
+        x={tempProps.x}
+        y={tempProps.y}
         ref={imgRef}
         scaleX={imgScale?.x}
         scaleY={imgScale?.y}
-        offsetX={imgOffset.x}
-        offsetY={imgOffset.y}
+        // offsetX={imgOffset.x}
+        // offsetY={imgOffset.y}
+        // width={tempProps.width}
+        // height={tempProps.height}
         strokeWidth={10}
         strokeEnabled={true}
-      //   onMouseEnter={() => setIsHovered(true)}
-      //   onMouseLeave={() => setIsHovered(false)}
+        //   onMouseEnter={() => setIsHovered(true)}
+        //   onMouseLeave={() => setIsHovered(false)}
         onClick={(e) => {
           setActiveItemId(id);
           updateProps();

@@ -16,109 +16,27 @@ import {
   useItemPropsStorage,
 } from "./storage/useItemPropsStorage";
 import { BuilderItemType } from "./storage/BuilderItemType";
+import { ImageUploadButton } from "./Components/ImageUploadButton";
+import { EditorHub } from "./Components/EditorTabs/EditorHub";
+import { Header } from "./Components/Header";
 
 export default function Home1() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-  const { t } = useTranslation();
-  const { items, addItem} = useItemStore();
-  const addItemProps = useItemPropsStorage((state) => state.addItemProps);
-  console.log("RERENDER");
 
+  const { t } = useTranslation();
+  console.log("RERENDER");
   const [viewerOpened, setViewerOpened] = useState<boolean>(false);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const canvasUrl = useTextureLinkStore((state) => state.link);
-
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files?.length) return;
-    const file = event.target.files[0];
-    const id = crypto.randomUUID();
-    addItem(id, BuilderItemType.Image, file.name, file);
-    const props = {} as ImageProps;
-    addItemProps(id, BuilderItemType.Image, props);
-  };
-
-  const handleAddText = () => {
-    const id = crypto.randomUUID();
-    addItem(id, BuilderItemType.Text, "sample text");
-    const props = {
-      color: "#000000ff",
-      value: "text2",
-      size: 16,
-      style: "normal",
-    } as TextProps;
-    addItemProps(id, BuilderItemType.Text, props);
-  };
-  useEffect(() => {
-    const val = window.localStorage.getItem("theme");
-    if (val === "dark" || val === "light") setTheme(val);
-    else setTheme("light");
-  }, []);
-  useEffect(() => {}, [items]);
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+  
+ 
   return (
     <div id="root">
-      <div  className="header">
-        <span>
-          <img src="dp_logo.jpeg" />
-          <h1>{t("mug_editor")}</h1>
-        </span>
-
-        <div className="header-buttons">
-          <button className="theme-btn shadow1" onClick={()=>setTheme(theme! === "dark" ? "light" : "dark")}>
-            <img
-              src={"svg/sun2.svg"}
-              className={theme! === "dark" ? "" : "nn"}
-            />
-            <img
-              src={"svg/night.svg"}
-              className={theme! === "dark" ? "nn" : ""}
-            />
-          </button>
-          <LanguageSwitcher />
-        </div>
-      </div>
+      <Header/>
       <div className="builder-main">
         <div className="builder-left-column">
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            accept="image/png, image/jpeg"
-            onChange={handleImageUpload}
-            multiple
-          ></input>
-          <button className="uploadImg-btn shadow1" onClick={handleUploadClick}>
-            <span>{t("upload_image")}</span>
-            <img src="upload.png"></img>
-          </button>
-          <div className="edit-panel">
-            <div className="panel-buttons">
-              <button className="panel-btn ">
-                <img src="layer.png" className="button-icon" />
-                <span className="panel-buttons-tooltip">{t("layers")}</span>
-              </button>
-              <button className="panel-btn nn">
-                <img src="font.png" className="button-icon" />
-                <span className="panel-buttons-tooltip">Add Text</span>
-              </button>
-              <button className="panel-btn nn">
-                <img src="shapes.png" className="button-icon" />
-                <span className="panel-buttons-tooltip">Add Shape</span>
-              </button>
-              <button className="panel-btn nn">
-                <img src="colour.png" className="button-icon" />
-                <span className="panel-buttons-tooltip">Image Effects</span>
-              </button>
-            </div>
-            <LayersTab />
-          </div>
+          <ImageUploadButton/>
+         <EditorHub/>
         </div>
         <div className="builder-right-column">
           <BuilderCanvas openViewer={() => setViewerOpened(true)} />

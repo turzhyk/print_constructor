@@ -1,4 +1,5 @@
 import { BuilderItemType } from "@/app/storage/BuilderItemType";
+import { useItemStore } from "@/app/storage/useBuilderStore";
 import {
   TextProps,
   useItemPropsStorage,
@@ -20,10 +21,15 @@ export const TextTooltip = ({
     setItalic,
     setBold,
   } = useItemPropsStorage();
+  const renameItem = useItemStore(s=>s.renameItem);
   const activeItem = getItemById(targetId);
   const textProps = activeItem?.props as TextProps;
   if (!activeItem) return;
-  if (activeItem.type != BuilderItemType.Text) return;
+  if (
+    activeItem.type != BuilderItemType.Text ||
+    activeItem.basicProps === undefined
+  )
+    return;
   const stageDom = stageRef.current?.container();
   const rect = stageDom?.getBoundingClientRect() || { x: 0, y: 0 };
   return (
@@ -46,7 +52,7 @@ export const TextTooltip = ({
         value={textProps.value}
         onChange={(e) => {
           setTextValue(targetId, e.target.value);
-          // renameItem(activeItemId,e.target.value);
+          renameItem(targetId,e.target.value);
         }}
       ></input>
       <span className="text-tooltip-fontsize">

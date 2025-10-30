@@ -2,6 +2,7 @@ import useActiveItemId from "@/app/storage/useActiveItemId";
 import { useItemStore } from "@/app/storage/useBuilderStore";
 import { useItemPropsStorage } from "@/app/storage/useItemPropsStorage";
 import Konva from "konva";
+import { nanoid } from "nanoid";
 
 export const ToolsTooltip = ({
   targetId,
@@ -28,7 +29,7 @@ export const ToolsTooltip = ({
     setActiveItem("");
   };
   const handleDuplicate = () => {
-    const newId = crypto.randomUUID();
+    const newId = nanoid();
     duplicateItem(targetId, newId);
     duplicateItemProps(targetId, newId);
     setActiveItem(newId);

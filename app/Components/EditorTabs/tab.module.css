@@ -1,0 +1,9 @@
+@import "/constructor.css";
+
+.panel-text-content{
+      display: grid;
+      grid-template-columns: auto auto;
+}
+.panel-text-element{
+      background-color: var(--accent-color1);
+}

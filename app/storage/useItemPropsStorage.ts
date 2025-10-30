@@ -1,6 +1,7 @@
 import { storage } from "three/tsl";
 import { create } from "zustand";
 import { BuilderItemType } from "./BuilderItemType";
+import { useCanvasStore } from "./useCanvasStore";
 export interface BasicProps {
   x: number;
   y: number;
@@ -20,7 +21,7 @@ export interface TextProps {
 interface IBuilderItemProps {
   id: string;
   type: BuilderItemType;
-  basicProps: BasicProps;
+  basicProps: BasicProps | undefined;
   props: ImageProps | TextProps;
 }
 interface ItemsProps {
@@ -44,17 +45,19 @@ export const useItemPropsStorage = create<ItemsProps>()((set, get) => ({
   itemsProps: {},
 
   addItemProps: (id, type, specificProps) => {
-    set((state) => ({
-      itemsProps: {
-        ...state.itemsProps,
-        [id]: {
-          id,
-          type,
-          basicProps: { x: 0, y: 0, width: 100, height: 100, rotation: 0 },
-          props: specificProps,
+    set((state) => {
+      return {
+        itemsProps: {
+          ...state.itemsProps,
+          [id]: {
+            id,
+            type,
+            basicProps: undefined,
+            props: specificProps,
+          },
         },
-      },
-    }));
+      };
+    });
   },
   //   setPos: (id: string, x: number, y: number) =>
   //     set((state) => ({

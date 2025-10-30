@@ -4,11 +4,11 @@
   --accent-color1: #ffb25a;
   --icon-filter: invert(0);
   --icon-filter1: invert(1);
-  --bg: #ededed;
+  --bg: #f7f7f7;
   --panel-bg: white;
   --panel-bg1: #353535;
   --outline1: #c6c6c6;
-    --panel-bg-nn: #f0f0f0;
+  --panel-bg-nn: #f0f0f0;
   --panel-btn-outline: rgb(201, 201, 201);
 }
 [data-theme="dark"] {
@@ -22,14 +22,15 @@
   --outline1: #4a4a4a;
   --panel-btn-outline: #6d6d6d;
 }
-html, body {
+html,
+body {
   background-color: var(--bg);
   color: var(--text-color);
   transition-property: background-color, color;
   transition-duration: 0.2s;
   height: 100%;
 }
-#root{
+#root {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -38,7 +39,7 @@ html, body {
 img.iconThemed {
   filter: var(--icon-filter);
 }
-footer{
+footer {
   height: 50rem;
   background-color: #c6c6c6;
 }
@@ -123,7 +124,6 @@ footer{
   height: 100%;
   cursor: pointer;
   opacity: 0;
-  
 }
 .lang-btn label {
   position: relative;
@@ -167,7 +167,6 @@ footer{
   transform: translateX(2.5rem);
 }
 @media only screen and (min-width: 1265px) {
-  
 }
 .builder-main {
   display: flex;
@@ -182,7 +181,7 @@ footer{
 .builder-left-column {
   margin: 1rem;
   margin-right: 0.5rem;
-  width:  auto;
+  width: auto;
   /* height: 100%; */
   /* min-width: 16rem; */
   min-width: 17rem;
@@ -196,7 +195,6 @@ footer{
   margin-left: 0.5rem;
   width: 80%;
   flex: 1;
-  
 }
 .uploadImg-btn {
   width: 100%;
@@ -255,7 +253,6 @@ footer{
 .panel-btn img {
   transition-property: transform;
   transition-duration: 0.2s;
-  
 }
 .panel-btn:hover img {
   transform: scale(1.1);
@@ -311,7 +308,7 @@ footer{
   width: 100%;
   height: 3rem;
   text-align: center;
-  font-weight: 600;
+  /* font-weight: 600; */
 }
 .panel-layers hr {
   border-color: var(--panel-btn-outline);
@@ -382,28 +379,41 @@ footer{
 .layer-arrow-btn:hover {
   background-color: #ffb25a;
 }
+.panel-text-content {
+  display: grid;
+  grid-template-columns: auto auto;
+  padding: 0.5rem;
+}
+.panel-text-element {
+  margin: 0.2rem;
+  outline: 1px solid var(--outline1);
+  height: 4rem;
+  text-align: center;
+  line-height: 4rem;
+  cursor: pointer;
+}
 .rotate180 {
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
 }
 
-.cup-type-panel{
+.cup-type-panel {
   display: flex;
   justify-content: left;
   gap: 1rem;
   height: 100%;
 }
-.cup-type-panel > button{
+.cup-type-panel > button {
   aspect-ratio: 1;
   height: 100%;
   /* margin: 0.5rem; */
   background-color: #c2c2c2;
   border-radius: var(--main-border-radius);
 }
-.cup-type-panel img{
+.cup-type-panel img {
   width: 100%;
   height: 100%;
-border-radius: var(--main-border-radius);
+  border-radius: var(--main-border-radius);
 }
 .builder-canvas {
   background-color: rgb(216, 216, 216);
@@ -591,23 +601,23 @@ input.text-tooltip-color {
   max-width: 100%;
   max-height: 100%;
 }
-.canvas-footer{
+.canvas-footer {
   display: flex;
   /* justify-content: space-between; */
   height: 15rem;
   margin-top: 1rem;
 }
-.canvas-footer-viewer{
+.canvas-footer-viewer {
   position: relative;
   cursor: pointer;
 }
-.canvas-footer .vl{
+.canvas-footer .vl {
   height: 80%;
   flex: 0;
   outline: 1px solid var(--outline1);
   margin: auto;
 }
-.canvas-footer-viewer button{
+.canvas-footer-viewer button {
   position: absolute;
   width: 2rem;
   height: 2rem;
@@ -615,7 +625,7 @@ input.text-tooltip-color {
   right: 1rem;
   transition-duration: 0.1s;
 }
-.canvas-footer-viewer:hover button{
+.canvas-footer-viewer:hover button {
   position: absolute;
   width: 2rem;
   height: 2rem;
@@ -623,24 +633,24 @@ input.text-tooltip-color {
   right: 1rem;
   transform: scale(1.4);
 }
-.canvas-footer-viewer img{
+.canvas-footer-viewer img {
   width: 1.5rem;
   height: 1.5rem;
   margin: auto;
   filter: var(--icon-filter);
 }
-.canvas-footer-tools{
+.canvas-footer-tools {
   flex-grow: 1;
 }
-button.download-jpg{
+button.download-jpg {
   width: 10rem;
   height: 3rem;
   border-radius: var(--main-border-radius);
- outline: 1px solid var(--panel-btn-outline);
- transition-duration: 0.1s;
- cursor: pointer;
+  outline: 1px solid var(--panel-btn-outline);
+  transition-duration: 0.1s;
+  cursor: pointer;
 }
-button.download-jpg:hover{
+button.download-jpg:hover {
   transform: scale(1.05);
 }
 .stage-buttons {
@@ -701,16 +711,16 @@ button.download-jpg:hover{
   .theme-btn {
     margin-right: 0rem;
   }
-  .builder-main{
+  .builder-main {
     flex-direction: column;
   }
-  .builder-left-column{
+  .builder-left-column {
     height: 40rem;
     width: auto;
     max-width: 100%;
     margin: 1rem;
   }
-  .builder-right-column{
+  .builder-right-column {
     width: auto;
     margin: 1rem;
   }
