@@ -15,16 +15,10 @@ import { ToolsTooltip } from "./Components/Tooltips/ToolsTooltip";
 import { TextTooltip } from "./Components/Tooltips/TextTooltip";
 import { CanvasImage } from "./Components/CanvasImage";
 import { BuilderCanvasFooter } from "./Components/BuilderCanvasFooter";
-import { useItemPropsStorage } from "./storage/useItemPropsStorage";
 import { useCanvasStore } from "./storage/useCanvasStore";
 
-const canvasSize = { x: 945, y: 405 };
 const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
   const { t } = useTranslation();
-  const [textStyle, setTextStyle] = useState<{
-    italic: boolean;
-    bold: boolean;
-  }>({ italic: false, bold: false });
 
   const stageRef = React.useRef<Konva.Stage>(null);
   const setUri = useTextureLinkStore((state) => state.setLink);
@@ -32,25 +26,17 @@ const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
   const { id: activeItemId, setId: setActiveItem } = useActiveItemId();
 
   const items = useItemStore((s) => s.items);
-  const [stageSize, setStageSize] = useState({
-    width: 21,
-    height: 9,
-  });
   const getSize = useCanvasStore((s) => s.getSize);
   const setSize = useCanvasStore((s) => s.setSize);
 
   const handleExport = () => {
-    if (stageRef.current != null) {
-      const uri = stageRef.current.toDataURL({ pixelRatio: 4 });
-      // console.log(uri);
-      // setUri(uri);
+    if (stageRef.current) {
+      const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
+      if(uri!="data:,")
+      setUri(uri);
     }
   };
   useEffect(() => {
-    // setStageSize({
-    //   width: document.getElementById("builder-canvas")?.clientWidth!,
-    //   height: document.getElementById("builder-canvas")?.clientHeight!,
-    // });
     setSize(
       document.getElementById("builder-canvas")?.clientWidth!,
       document.getElementById("builder-canvas")?.clientHeight!
@@ -88,11 +74,8 @@ const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
         <Stage
           width={getSize().width}
           height={getSize().height}
-          // width={21}
-          // height={0}
+
           ref={stageRef}
-          // className="builder-canvas "
-          // id="builder-canvas"
         >
           <Layer>
             <Rect
@@ -124,7 +107,7 @@ const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
           </Layer>
         </Stage>
       </div>
-      <BuilderCanvasFooter />
+      <BuilderCanvasFooter openViewer={openViewer} />
       {activeItemId !== "" && (
         <SizeTooltip targetId={activeItemId} stageRef={stageRef} />
       )}

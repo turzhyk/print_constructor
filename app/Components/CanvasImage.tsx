@@ -42,8 +42,6 @@ export const CanvasImage = ({
   });
   const imgRef = useRef<any>(null);
   const trRef = useRef<any>(null);
-  //   const rotatorIcon = new window.Image();
-  //   rotatorIcon.src = "/svg/rotate.svg";
 
   function handleDrag(e: KonvaEventObject<MouseEvent, Node<NodeConfig>>) {
     //     const node = e.target;
@@ -56,9 +54,6 @@ export const CanvasImage = ({
   const updateProps = () => {
     if (imgRef === null) return;
     const absPos = imgRef.current.getClientRect();
-    //const node = imgRef.current.node.width;
-    const  attrs = imgRef.current.attrs;
-    console.log(attrs.scaleX);
     const rot = imgRef.current.getAbsoluteRotation();
     setBasicProps(id, {
       x: absPos.x,
@@ -136,8 +131,6 @@ export const CanvasImage = ({
         // height={tempProps.height}
         strokeWidth={10}
         strokeEnabled={true}
-        //   onMouseEnter={() => setIsHovered(true)}
-        //   onMouseLeave={() => setIsHovered(false)}
         onClick={(e) => {
           setActiveItemId(id);
           updateProps();
@@ -146,6 +139,26 @@ export const CanvasImage = ({
           handleDrag(e);
         }}
         draggable
+      />
+      <Image
+        image={img}
+        x={tempProps.x+tempProps.width}
+        y={tempProps.y}
+        scaleX={imgScale?.x}
+        scaleY={imgScale?.y}
+        // offsetX={imgOffset.x}
+        // offsetY={imgOffset.y}
+        // width={tempProps.width}
+        // height={tempProps.height}
+        strokeWidth={10}
+        strokeEnabled={true}
+        onClick={(e) => {
+          setActiveItemId(id);
+          updateProps();
+        }}
+        onDragMove={(e) => {
+          handleDrag(e);
+        }}
       />
 
       {isActive && (

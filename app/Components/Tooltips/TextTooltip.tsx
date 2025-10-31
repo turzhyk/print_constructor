@@ -5,6 +5,7 @@ import {
   useItemPropsStorage,
 } from "@/app/storage/useItemPropsStorage";
 import Konva from "konva";
+import { FontResizer } from "./Misc/FontResizer";
 
 export const TextTooltip = ({
   targetId,
@@ -55,9 +56,7 @@ export const TextTooltip = ({
           renameItem(targetId,e.target.value);
         }}
       ></input>
-      <span className="text-tooltip-fontsize">
-        <img src={"/svg/font-size.svg"} draggable={false} />
-      </span>
+     <FontResizer activeId={targetId} textSize={textProps.size}/>
 
       <input
         className="text-tooltip-fontsize"
@@ -82,13 +81,13 @@ export const TextTooltip = ({
           className={"text-tooltip-btn " + (textProps.bold ? "act" : "")}
           onClick={() => setBold(targetId, !textProps.bold)}
         >
-          <img src={"/svg/bold.svg"} />
+          <img src={"svg/bold.svg"} />
         </button>
         <button
           className={"text-tooltip-btn " + (textProps.italic ? "act" : "")}
           onClick={() => setItalic(targetId, !textProps.italic)}
         >
-          <img src={"/svg/italic.svg"} />
+          <img src={"svg/italic.svg"} />
         </button>
         <span
           className="text-tooltip-color"

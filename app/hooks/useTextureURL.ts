@@ -4,7 +4,11 @@ interface ITextureUrl {
   setLink: (value: string) => void;
 }
 const useTextureLinkStore = create<ITextureUrl>()((set) => ({
-  link: "",
-  setLink: (value) => set((state) => ({ link: value })),
+  link: "cup_color_placeholder.jpg",
+  setLink: (value) =>
+    set((state) => {
+      // console.log(value);
+      return { link: value };
+    }),
 }));
 export default useTextureLinkStore;

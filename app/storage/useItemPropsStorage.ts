@@ -34,7 +34,6 @@ interface ItemsProps {
   setTextValue: (id: string, value: string) => void;
   setTextColor: (id: string, color: string) => void;
   setTextSize: (id: string, size: number) => void;
-  //   setTextStyle: (id: string, style: string) => void;
   setBasicProps: (id: string, value: BasicProps) => void;
   setItalic: (id: string, value: boolean) => void;
   setBold: (id: string, value: boolean) => void;
@@ -59,19 +58,6 @@ export const useItemPropsStorage = create<ItemsProps>()((set, get) => ({
       };
     });
   },
-  //   setPos: (id: string, x: number, y: number) =>
-  //     set((state) => ({
-  //       itemsProps: state.itemsProps.map((item) =>
-  //         item.id === id ? {
-  //             ...item,
-  //             basicProps: {
-  //               ...item.basicProps,
-  //               x: x,
-  //               y: y,
-  //             },
-  //           } : item
-  //       ),
-  //     })),
   setBasicProps: (id, value) =>
     set((state) => {
       const item = state.itemsProps[id];
@@ -127,7 +113,7 @@ export const useItemPropsStorage = create<ItemsProps>()((set, get) => ({
           ...state.itemsProps,
           [id]: {
             ...item,
-            props: { ...item.props, size: value },
+            props: { ...item.props, size: Math.max(10,Math.min(200,value)) },
           },
         },
       };

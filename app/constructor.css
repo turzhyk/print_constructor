@@ -10,6 +10,7 @@
   --outline1: #c6c6c6;
   --panel-bg-nn: #f0f0f0;
   --panel-btn-outline: rgb(201, 201, 201);
+  --footer-color: #c8c8c8;
 }
 [data-theme="dark"] {
   --text-color: white;
@@ -21,6 +22,7 @@
   --panel-bg-nn: #4e4e4e;
   --outline1: #4a4a4a;
   --panel-btn-outline: #6d6d6d;
+   --footer-color: #343434;
 }
 html,
 body {
@@ -40,8 +42,16 @@ img.iconThemed {
   filter: var(--icon-filter);
 }
 footer {
-  height: 50rem;
-  background-color: #c6c6c6;
+  height: 5rem;
+  background-color: var(--footer-color);
+  display: flex;
+  justify-content: center;
+}
+footer span {
+  margin: auto;
+  opacity: 0.4;
+  font-weight: 500;
+  letter-spacing: 0.05 rem;
 }
 .header {
   height: 4rem;
@@ -495,7 +505,7 @@ footer {
   background-color: #dbdbdb;
 }
 .text-tooltip input.text-tooltip-fontsize {
-  width: 2.5rem;
+  width: 2.8rem;
   margin-left: -1rem;
 }
 span.text-tooltip-fontsize {
@@ -573,6 +583,25 @@ input.text-tooltip-color {
   border-radius: var(--main-border-radius);
   animation: fadeIn 0.1s ease-out;
 }
+.viewer-canvas img{
+  position: absolute;
+  left: 40%;
+  top: 40%;
+  width: 10rem;
+  height: 10rem;
+    animation-name: spin;
+  animation-duration: 5000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear; 
+}
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(-360deg);
+    }
+}
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -610,12 +639,14 @@ input.text-tooltip-color {
 .canvas-footer-viewer {
   position: relative;
   cursor: pointer;
+  border-radius: var(--main-border-radius);
 }
 .canvas-footer .vl {
   height: 80%;
   flex: 0;
   outline: 1px solid var(--outline1);
   margin: auto;
+  margin-right: 1rem;
 }
 .canvas-footer-viewer button {
   position: absolute;
@@ -649,9 +680,21 @@ button.download-jpg {
   outline: 1px solid var(--panel-btn-outline);
   transition-duration: 0.1s;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
 }
+
 button.download-jpg:hover {
   transform: scale(1.05);
+}
+.download-jpg img{
+  margin: auto;
+  width: 1.3rem;
+  height: 1.3rem;
+  filter: var(--icon-filter);
+}
+.download-jpg span{
+  margin: auto;
 }
 .stage-buttons {
   height: 3rem;
