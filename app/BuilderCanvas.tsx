@@ -76,48 +76,44 @@ const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
         <hr />
       </div>
 
-        <div className="builder-canvas" id="builder-canvas">
-          <Stage
-            width={getSize().width}
-            height={getSize().height}
-            ref={stageRef}
-          >
-            <Layer>
-              <Rect
-                width={10000}
-                height={10000}
-                fill={"white"}
-                onClick={() => setActiveItem("")}
-              ></Rect>
+      <div className="builder-canvas" id="builder-canvas">
+        <Stage width={getSize().width} height={getSize().height} ref={stageRef}>
+          <Layer>
+            <Rect
+              width={10000}
+              height={10000}
+              fill={"white"}
+              onClick={() => setActiveItem("")}
+            ></Rect>
 
-              {items.map((f, i) => {
-                if (f.type === BuilderItemType.Image)
-                  return (
-                    <CanvasImage
-                      key={f.id}
-                      id={f.id}
-                      isActive={activeItemId === f.id}
-                    />
-                  );
-                else if (f.type === BuilderItemType.Text) {
-                  return (
-                    <CanvasText
-                      key={f.id}
-                      id={f.id}
-                      isActive={activeItemId === f.id}
-                    ></CanvasText>
-                  );
-                }
-              })}
-            </Layer>
-          </Stage>
-        </div>
+            {items.map((f, i) => {
+              if (f.type === BuilderItemType.Image)
+                return (
+                  <CanvasImage
+                    key={f.id}
+                    id={f.id}
+                    isActive={activeItemId === f.id}
+                  />
+                );
+              else if (f.type === BuilderItemType.Text) {
+                return (
+                  <CanvasText
+                    key={f.id}
+                    id={f.id}
+                    isActive={activeItemId === f.id}
+                  ></CanvasText>
+                );
+              }
+            })}
+          </Layer>
+        </Stage>
         {/* <div className="canvas-ruler-side">
           <div className="vl" />
           <p>9 cm</p>
           <div className="vl" />
         </div> */}
-    
+      </div>
+
       <BuilderCanvasFooter openViewer={openViewer} />
       {activeItemId !== "" && (
         <SizeTooltip targetId={activeItemId} stageRef={stageRef} />

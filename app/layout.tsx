@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Noto_Serif, Mukta , Noto_Sans_Mono} from "next/font/
 import { cookies } from "next/headers";
 import "./globals.css";
 import Head from "next/head";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,7 +45,8 @@ export default async function RootLayout({
       <body
         className={` ${mukta.className} antialiased`}
       >
-        {children}
+        <Suspense fallback={<div className="c">Loading...</div>}>
+        {children}</Suspense>
       </body>
     </html>
   );

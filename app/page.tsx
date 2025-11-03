@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import "./constructor.css";
 import BuilderCanvas from "./BuilderCanvas";
 import "./i18nconfig.ts";
@@ -27,6 +27,7 @@ export default function Home1() {
 
 
   return (
+     
     <div id="root">
       <Header />
       <div className="builder-main">
