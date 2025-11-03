@@ -8,17 +8,11 @@ import { Canvas } from "@react-three/fiber";
 
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { TextureLoader } from "three";
-import { createRoot } from "react-dom/client";
-import { useItemPropsStorage } from "./storage/useItemPropsStorage";
 import useTextureLinkStore from "./hooks/useTextureURL";
 import {
-  CameraControls,
-  ContactShadows,
   Environment,
   OrbitControls,
-  Shadow,
 } from "@react-three/drei";
-import { PresetsType } from "@react-three/drei/helpers/environment-assets";
 
 
 type BoxProps = ThreeElements["mesh"] & {
@@ -35,9 +29,7 @@ viewerCamera.lookAt(0, -1, 0);
 
 const ModelViewer = () => {
   const [isRotating, setIsRotating] = useState<boolean>(true);
-  const itemsProps = useItemPropsStorage((s) => s.itemsProps);
   const url = useTextureLinkStore((s) => s.link);
-  console.log("url from store:", url);
   // if (canvasUrl === "") return null;
   // const tableColor = useLoader(
   //   TextureLoader,
@@ -61,7 +53,7 @@ const ModelViewer = () => {
   };
   
   return (
-    <Canvas camera={viewerCamera} gl={{ preserveDrawingBuffer: true }} key="stable">
+    <Canvas camera={viewerCamera} gl={{ preserveDrawingBuffer: true }} key="stable" onMouseUp={onControlEnd} onMouseDown={setRotate}>
       {/* <ambientLight intensity={Math.PI /5} />  */}
       {/* <pointLight position={[10, 3, -10]} intensity={100} /> */}
 
@@ -86,10 +78,8 @@ const ModelViewer = () => {
       <OrbitControls
         maxPolarAngle={Math.PI / 2.5}
         minPolarAngle={Math.PI / 2.5}
-        onChange={setRotate}
         enablePan={false}
         enableZoom={false}
-        onEnd={() => onControlEnd()}
       />
       <Environment
         background={false} // can be true, false or "only" (which only sets the background) (default: false)
@@ -99,7 +89,7 @@ const ModelViewer = () => {
         environmentIntensity={0.6} // optional intensity factor (default: 1, only works with three 0.163 and up)
         environmentRotation={[0, Math.PI / 2, 0]} // optional rotation (default: 0, only works with three 0.163 and up)
         // files={["px.png", "nx.png", "py.png", "ny.png", "pz.png", "nz.png"]}
-        files="/hdri/studio001/brown_photostudio_02_2k.hdr"
+        files="hdri/studio001/brown_photostudio_02_2k.hdr"
         path=""
         scene={undefined} // adds the ability to pass a custom THREE.Scene, can also be a ref
        

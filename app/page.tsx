@@ -10,13 +10,19 @@ import { ImageUploadButton } from "./Components/ImageUploadButton";
 import { EditorHub } from "./Components/EditorTabs/EditorHub";
 import { Header } from "./Components/Header";
 import dynamic from "next/dynamic";
+import { useSearchParams } from 'next/navigation'
 const ModelViewer = dynamic(
   () => import('./3d_viewer'),
   { ssr: false }
 );
+export function reportWebVitals(metric:any){
+  console.log(metric);
+}
 export default function Home1() {
   const { t } = useTranslation();
-  console.log("RERENDER");
+   const searchParams = useSearchParams()
+  const token = searchParams.get('token')
+  console.log(token);
   const [viewerOpened, setViewerOpened] = useState<boolean>(false);
 
 
@@ -43,8 +49,8 @@ export default function Home1() {
       )}
       <footer>
         <span>
-          Crafted with love by {" "}
-          <a href="https://github.com/turzhyk">github.com/turzhyk</a>
+          Crafted with passion by {" "}
+          <a href="https://github.com/turzhyk" className="underline">github.com/turzhyk</a>
         </span>
       </footer>
     </div>

@@ -140,8 +140,7 @@ export const CanvasImage = ({
           handleDrag(e);
         }}
         draggable
-      />
-      <Image
+      ><Image
         image={img}
         x={tempProps.x+tempProps.width}
         y={tempProps.y}
@@ -160,7 +159,8 @@ export const CanvasImage = ({
         onDragMove={(e) => {
           handleDrag(e);
         }}
-      />
+      /></Image>
+      
 
       {isActive && (
         <Transformer

@@ -41,7 +41,7 @@ export const ToolsTooltip = ({
     <div
       className="tools-tooltip shadow1"
       style={{
-        top: activeImageProps.y + rect.y + activeImageProps.height / 2 - 40,
+        top: activeImageProps.y + rect.y + activeImageProps.height / 2 - 60,
         left: activeImageProps.x + rect.x - 80,
       }}
     >

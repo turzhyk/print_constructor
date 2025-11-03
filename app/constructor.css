@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Cambay:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+Mono:wght@100..900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
 :root {
+    --text-color: #000000;
   --main-border-radius: 0.5rem;
   --accent-color1: #ffb25a;
   --icon-filter: invert(0);
@@ -11,6 +12,7 @@
   --panel-bg-nn: #f0f0f0;
   --panel-btn-outline: rgb(201, 201, 201);
   --footer-color: #c8c8c8;
+  --btn-active: #f2f2f2;
 }
 [data-theme="dark"] {
   --text-color: white;
@@ -23,6 +25,7 @@
   --outline1: #4a4a4a;
   --panel-btn-outline: #6d6d6d;
    --footer-color: #343434;
+    --btn-active: #404040;
 }
 html,
 body {
@@ -217,13 +220,17 @@ footer span {
   justify-content: space-between;
   cursor: pointer;
   font-size: 1.1rem;
-  transition-duration: 0.1s;
+  transition-duration: 0.05s;
 }
 .uploadImg-btn:hover {
   outline: 2px solid var(--accent-color1);
   /* box-shadow: 0 2px 16px var(--accent-color1); */
-  transform: scale(1.02);
-  text-decoration: underline;
+  /* transform: scale(1.02); */
+  /* text-decoration: underline; */
+  background-color: var(--btn-active);
+}
+.uploadImg-btn:hover > img{
+  transform: scale(1.1);
 }
 .uploadImg-btn > img {
   aspect-ratio: 1;
@@ -638,7 +645,7 @@ input.text-tooltip-color {
 }
 .canvas-footer-viewer {
   position: relative;
-  cursor: pointer;
+  cursor: w-resize;
   border-radius: var(--main-border-radius);
 }
 .canvas-footer .vl {
@@ -655,6 +662,7 @@ input.text-tooltip-color {
   top: 1rem;
   right: 1rem;
   transition-duration: 0.1s;
+  cursor: pointer;
 }
 .canvas-footer-viewer:hover button {
   position: absolute;
@@ -678,14 +686,18 @@ button.download-jpg {
   height: 3rem;
   border-radius: var(--main-border-radius);
   outline: 1px solid var(--panel-btn-outline);
-  transition-duration: 0.1s;
+  transition-duration: 0.05s;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
 }
 
 button.download-jpg:hover {
-  transform: scale(1.05);
+  background-color: var(--btn-active);
+}
+
+button.download-jpg:hover > img {
+ transform: scale(1.1);
 }
 .download-jpg img{
   margin: auto;
@@ -695,6 +707,44 @@ button.download-jpg:hover {
 }
 .download-jpg span{
   margin: auto;
+}
+.canvas-ruler-top{
+  display: flex;
+  width: calc(100%);
+  
+}
+.canvas-ruler-top hr{
+  width: auto;
+  margin: auto;
+  flex: 1;
+}
+.canvas-ruler-top div{
+  margin: 1rem;
+}
+.builder-hanvas-holder {
+  display: flex;
+ width: 100%;
+  height: 100%;
+  overflow: hidden;
+  max-width: 100%;
+  max-height: 100%;
+}
+.canvas-ruler-side{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-left: 1rem;
+}
+.canvas-ruler-side .vl{
+  width: auto;
+  flex: 1;
+  border-left: 1px solid var(--text-color);
+  margin: auto;
+}
+.canvas-ruler-side >  p {
+  writing-mode: vertical-lr;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 .stage-buttons {
   height: 3rem;
