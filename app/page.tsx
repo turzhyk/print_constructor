@@ -5,11 +5,15 @@ import BuilderCanvas from "./BuilderCanvas";
 import "./i18nconfig.ts";
 import { useTranslation } from "react-i18next";
 
-import ModelViewer from "./3d_viewer";
+// import ModelViewer from "./3d_viewer";
 import { ImageUploadButton } from "./Components/ImageUploadButton";
 import { EditorHub } from "./Components/EditorTabs/EditorHub";
 import { Header } from "./Components/Header";
-
+import dynamic from "next/dynamic";
+const ModelViewer = dynamic(
+  () => import('./3d_viewer'),
+  { ssr: false }
+);
 export default function Home1() {
   const { t } = useTranslation();
   console.log("RERENDER");

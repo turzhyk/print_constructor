@@ -1,3 +1,4 @@
+'use client'
 import useActiveItemId from "@/app/storage/useActiveItemId";
 import { useItemStore } from "@/app/storage/useBuilderStore";
 import { useItemPropsStorage } from "@/app/storage/useItemPropsStorage";

@@ -1,3 +1,4 @@
+'use client'
 import { useCanvasStore } from "@/app/storage/useCanvasStore";
 import { useItemPropsStorage } from "@/app/storage/useItemPropsStorage";
 import Konva from "konva";

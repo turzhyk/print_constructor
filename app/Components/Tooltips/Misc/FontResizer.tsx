@@ -1,3 +1,4 @@
+"use client";
 import { useItemPropsStorage } from "@/app/storage/useItemPropsStorage";
 import React, {  useEffect, useRef, useState } from "react";
 

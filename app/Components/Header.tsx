@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";

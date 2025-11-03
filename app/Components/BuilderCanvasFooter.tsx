@@ -1,9 +1,14 @@
+"use client";
 import React, { useState } from "react";
 import ModelViewer from "../3d_viewer";
 import useTextureLinkStore from "../hooks/useTextureURL";
 import { useTranslation } from "react-i18next";
 import { PresetsType } from "@react-three/drei/helpers/environment-assets";
-
+// import dynamic from "next/dynamic";
+// const ModelViewer = dynamic(
+//   () => import('../3d_viewer'),
+//   { ssr: false }
+// );
 export const BuilderCanvasFooter = ({
   openViewer,
 }: {
@@ -30,22 +35,10 @@ export const BuilderCanvasFooter = ({
           <img src="svg/download.svg" />
         </button>
       </div>
-      <div className="flex flex-col collapse">
-        <button onClick={() => setBg("apartment")}>BG</button>
-        <button onClick={() => setBg("city")}>BG</button>
-        <button onClick={() => setBg("dawn")}>BG</button>
-        <button onClick={() => setBg("forest")}>BG</button>
-        <button onClick={() => setBg("lobby")}>BG</button>
-        <button onClick={() => setBg("night")}>BG</button>
-        <button onClick={() => setBg("park")}>BG</button>
-        <button onClick={() => setBg("studio")}>BG</button>
-         <button onClick={() => setBg("sunset")}>BG</button>
-        <button onClick={() => setBg("warehouse")}>BG</button>
-      </div>
 
       <div className="vl"></div>
       <div className="canvas-footer-viewer" >
-        <ModelViewer bg={bg} />
+        <ModelViewer />
         <button >
           <img className="" src="svg/fullscreen.svg" onClick={openViewer}/>
         </button>

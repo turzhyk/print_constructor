@@ -1,4 +1,4 @@
-import { storage } from "three/tsl";
+'use client'
 import { create } from "zustand";
 import { BuilderItemType } from "./BuilderItemType";
 import { useCanvasStore } from "./useCanvasStore";

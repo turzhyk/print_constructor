@@ -20,6 +20,7 @@ import {
 } from "@react-three/drei";
 import { PresetsType } from "@react-three/drei/helpers/environment-assets";
 
+
 type BoxProps = ThreeElements["mesh"] & {
   url: string; // твой новый проп
   rotating: boolean;
@@ -32,23 +33,24 @@ const viewerCamera = new THREE.PerspectiveCamera(25, 1, 1, 1000);
 viewerCamera.position.set(0, 3, -10);
 viewerCamera.lookAt(0, -1, 0);
 
-const ModelViewer = ({ bg }: { bg?: PresetsType }) => {
+const ModelViewer = () => {
   const [isRotating, setIsRotating] = useState<boolean>(true);
   const itemsProps = useItemPropsStorage((s) => s.itemsProps);
   const url = useTextureLinkStore((s) => s.link);
+  console.log("url from store:", url);
   // if (canvasUrl === "") return null;
-  const tableColor = useLoader(
-    TextureLoader,
-    "textures/wood2/kitchen_wood_diff_2k.jpg"
-  );
-  const tableNormal = useLoader(
-    TextureLoader,
-    "textures/wood2/kitchen_wood_nor_gl_2k.jpg"
-  );
-  const tableRough = useLoader(
-    TextureLoader,
-    "textures/wood2/kitchen_wood_rough_2k.jpg"
-  );
+  // const tableColor = useLoader(
+  //   TextureLoader,
+  //   "textures/wood2/kitchen_wood_diff_2k.jpg"
+  // );
+  // const tableNormal = useLoader(
+  //   TextureLoader,
+  //   "textures/wood2/kitchen_wood_nor_gl_2k.jpg"
+  // );
+  // const tableRough = useLoader(
+  //   TextureLoader,
+  //   "textures/wood2/kitchen_wood_rough_2k.jpg"
+  // );
 
   const setRotate = () => {
     setIsRotating(false);
@@ -57,8 +59,9 @@ const ModelViewer = ({ bg }: { bg?: PresetsType }) => {
     await timeout(500);
     setIsRotating(true);
   };
+  
   return (
-    <Canvas camera={viewerCamera}>
+    <Canvas camera={viewerCamera} gl={{ preserveDrawingBuffer: true }} key="stable">
       {/* <ambientLight intensity={Math.PI /5} />  */}
       {/* <pointLight position={[10, 3, -10]} intensity={100} /> */}
 
@@ -66,7 +69,7 @@ const ModelViewer = ({ bg }: { bg?: PresetsType }) => {
       <pointLight position={[0, 10, 0]}  intensity={40} />
       <Box url={url} rotating={isRotating} />
       {/* <Environment preset={""} environmentIntensity={0.8} /> */}
-      <mesh
+      {/* <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, -1.55, 0]}
         scale={6}
@@ -78,7 +81,7 @@ const ModelViewer = ({ bg }: { bg?: PresetsType }) => {
           normalMap={tableNormal}
           roughnessMap={tableRough}
         />
-      </mesh>
+      </mesh> */}
 
       <OrbitControls
         maxPolarAngle={Math.PI / 2.5}

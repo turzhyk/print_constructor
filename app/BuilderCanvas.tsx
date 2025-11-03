@@ -1,6 +1,6 @@
+"use client";
 import { Stage, Layer, Rect } from "react-konva";
 import React, { useState, useEffect } from "react";
-
 import "./i18nconfig";
 import { useTranslation } from "react-i18next";
 
@@ -16,6 +16,7 @@ import { TextTooltip } from "./Components/Tooltips/TextTooltip";
 import { CanvasImage } from "./Components/CanvasImage";
 import { BuilderCanvasFooter } from "./Components/BuilderCanvasFooter";
 import { useCanvasStore } from "./storage/useCanvasStore";
+import dynamic from "next/dynamic";
 
 const BuilderCanvas = ({ openViewer }: { openViewer: () => void }) => {
   const { t } = useTranslation();

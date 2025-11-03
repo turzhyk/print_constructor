@@ -1,3 +1,4 @@
+"use client";
 import { BuilderItemType } from "@/app/storage/BuilderItemType";
 import { useItemStore } from "@/app/storage/useBuilderStore";
 import {
